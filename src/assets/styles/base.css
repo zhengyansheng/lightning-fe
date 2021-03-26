@@ -1,0 +1,203 @@
+html,
+body,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+form,
+input,
+p,
+blockquote,
+th,
+td {
+  margin: 0;
+  padding: 0;
+}
+
+fieldset,
+img {
+  border: 0;
+}
+
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+th,
+var {
+  font-style: normal;
+  font-weight: normal;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+caption,
+th {
+  text-align: left;
+}
+
+div {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+table {
+  table-layout: fixed;
+}
+
+iframe {
+  background-color: white;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+  font-size: 13px;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  outline: none;
+  background: none;
+}
+
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select {
+  border: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  box-shadow: none;
+  cursor: pointer;
+  outline: none;
+}
+
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+textarea {
+  overflow: auto;
+  font-size: 12px;
+  resize: none;
+  -webkit-appearance: none;
+  outline: none;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  letter-spacing: .3px;
+  color: #666;
+  font: 13px/1.120 'Helvetica Neue', Helvetica, Arial, sans-serif, "Microsoft YaHei";
+}
+
+a {
+  text-decoration: none;
+  color: #777;
+}
+
+a:hover {
+  color: #333;
+  cursor: pointer;
+}
+
+article,
+aside,
+dialog,
+footer,
+header,
+section,
+footer,
+nav,
+figure,
+menu {
+  display: block;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+:focus {
+  outline: 0;
+}
+
+html,
+body,
+#app {
+  height: 100%;
+}
+
+html {
+  font-size: 14px;
+}
+
+.list-main {
+  width: 100%;
+}
+
+.list-main .search {
+  padding: 16px 25px;
+  background: #FFF;
+  margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.list-main .search .el-form--label-top {
+  display: inline-block;
+}
+
+.list-main .search .el-form--label-top .el-form-item {
+  display: inline-block;
+  width: 192px;
+  margin-right: 18px;
+}
+
+.list-main .search .el-form--label-top /deep/ .el-form-item__label {
+  height: 35px;
+  padding-bottom: 0px;
+}
+
+.list-main .search /deep/ .input-with-select .el-input-group__prepend {
+  background-color: #fff;
+}
+
+.list-main .search /deep/ .input-with-select .el-input-group__prepend .el-input__inner {
+  color: #647787;
+}
+
+.list-main .search .add-btn {
+  float: right;
+}
+
+.list-main .clear {
+  clear: both;
+}
+
+.list-main .list {
+  width: 100%;
+  box-sizing: border-box;
+  background: #FFF;
+  padding: 25px;
+}
