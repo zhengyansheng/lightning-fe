@@ -27,12 +27,11 @@
                     <el-tab-pane name="4" label="作业平台">
                         <Homework :nodes="currentNode" v-if="activeName=='4'" />
                     </el-tab-pane>
-                    <el-tab-pane name="5" label="配置管理"></el-tab-pane>
-                    <el-tab-pane name="6" label="发布系统"></el-tab-pane>
-                    <el-tab-pane name="7" label="域名管理"></el-tab-pane>
-                    <el-tab-pane name="8" label="监控管理"></el-tab-pane>
-                    <el-tab-pane name="9" label="流量调度"></el-tab-pane>
-                    <el-tab-pane name="10" label="成本管理"></el-tab-pane>
+                    <el-tab-pane name="5" label="配置管理"><img :src="lockPic" /></el-tab-pane>
+                    <el-tab-pane name="6" label="发布系统"><img :src="lockPic" /></el-tab-pane>
+                    <el-tab-pane name="8" label="监控管理"><img :src="lockPic" /></el-tab-pane>
+                    <el-tab-pane name="9" label="流量调度"><img :src="lockPic" /></el-tab-pane>
+                    <el-tab-pane name="7" label="域名管理"><img :src="lockPic" /></el-tab-pane>
                 </el-tabs>
             </div>
         </div>
@@ -48,6 +47,7 @@ import AuthManage from '@components/serviceTree/AuthManage.vue';
 import Homework from '@components/serviceTree/Homework.vue';
 import MachinePaid from '@components/serviceTree/machineManage/MachinePaid.vue';
 import AppkeyManage from '@components/serviceTree/machineManage/AppkeyManage.vue';
+import lockPic from '@assets/images/lock.svg'
 export default {
     name: '',
     data() {
@@ -56,7 +56,8 @@ export default {
             loading: false,
             currentNode: {},
             activeName: '1',
-            activeTabs: 'info'
+            activeTabs: 'info',
+            lockPic
         }
     },
     provide() {

@@ -103,13 +103,6 @@ const menuConfig = [{
     go() {
         window.location.href = '/corp'
     }
-}, {
-    title: '运营',
-    index: '7',
-    routeName: 'serviceTree',
-    go() {
-        window.location.href = '/operation'
-    }
 }
 // , {
 //     title: '资源管理',
