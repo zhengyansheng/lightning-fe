@@ -89,20 +89,20 @@ const menuConfig = [{
     go() {
         window.location.href = '/network'
     }
-}, {
-    title: '审计',
-    index: '5',
-    routeName: 'audit',
-    go() {
-        window.location.href = '/audit'
-    }
-}, {
-    title: '企业架构',
-    index: '6',
-    routeName: 'corp',
-    go() {
-        window.location.href = '/corp'
-    }
+//}, {
+//    title: '审计',
+//    index: '5',
+//    routeName: 'audit',
+//    go() {
+//        window.location.href = '/audit'
+//    }
+//}, {
+//    title: '企业架构',
+//    index: '6',
+//    routeName: 'corp',
+//    go() {
+//        window.location.href = '/corp'
+//    }
 }
 // , {
 //     title: '资源管理',
