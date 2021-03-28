@@ -1,4 +1,4 @@
-# ops-fe 
+# lightning-fe 
 
 ## Project setup
 ```
