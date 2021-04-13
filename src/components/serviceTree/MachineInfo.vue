@@ -28,16 +28,16 @@
             <div class="right-btns" v-if="nodes.level === 4">
                 <el-button :size="btnSize" type="primary" @click="relatedCmdb">关联</el-button>
                 <el-button :size="btnSize" type="warning" @click="deleteData">解绑</el-button>
+                <el-button :size="btnSize" type="primary">导出</el-button>
                 <el-popover
                     placement="bottom"
                     width="100"
                     trigger="click">
                     <el-button type="text" slot="reference">更多</el-button>
-                    <el-radio v-model="moreStatus" label="1">开机</el-radio>
-                    <el-radio v-model="moreStatus" label="2">关机</el-radio>
-                    <el-radio v-model="moreStatus" label="3">重启</el-radio>
-                    <el-radio v-model="moreStatus" label="4">下线</el-radio>
-                    <el-radio v-model="moreStatus" label="5">导出</el-radio>
+                    <el-link>开机</el-link>
+                    <el-link>关机</el-link>
+                    <el-link>重启</el-link>
+                    <el-link>下线</el-link>
                 </el-popover>
             </div>
         </div>
@@ -81,9 +81,10 @@
 <!--            <el-table-column prop="remark" label="备注"></el-table-column>-->
             <!--<el-table-column prop="create_time" label="创建时间" width="170"></el-table-column>-->
 <!--            <el-table-column prop="update_time" label="变更时间" width="170"></el-table-column>-->
-            <el-table-column label="操作" v-if="nodes.level === 4" fixed="right" width="100" align="center">
+            <el-table-column label="操作" v-if="nodes.level === 4" fixed="right" width="160" align="center">
                 <template slot-scope="scope">
-                    <el-button type="text" :disabled="true" :size="btnSize">登陆</el-button>
+                    <el-button type="text" :disabled="false" :size="btnSize" @click="checkLifeCircle(scope.row)">生命周期</el-button>
+                    <el-button type="text" :disabled="true" :size="btnSize" @click="deleteData(scope.row)">登陆</el-button>
                     <el-button type="text" :disabled="true" :size="btnSize" @click="deleteData(scope.row)">审计</el-button>
                 </template>
             </el-table-column>
@@ -96,7 +97,7 @@
             :visible.sync="showMachineDetails"
             size="50%"
             direction="rtl">
-            <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tabs v-model="activeName">
                 <el-tab-pane label="详情" name="first">
                     <MachineDetails :infos="machineInfos" />
                 </el-tab-pane>
@@ -108,6 +109,8 @@
                 <el-tab-pane label="操作日志" name="seventh"></el-tab-pane>
             </el-tabs>
         </el-drawer>
+
+        <LifeCircle :isShow.sync="showLifeCircle" />
     </div>
 </template>
 <script>
@@ -124,6 +127,7 @@
     import tenPic from '@assets/images/ten.svg'
     import azurePic from '@assets/images/azure.svg'
     import emptyPic from '@assets/images/empty.svg'
+    import LifeCircle from './LifeCircle'
     export default {
         name: '',
         props: {
@@ -136,7 +140,8 @@
         },
         components: {
             RelatedCmdbData,
-            MachineDetails
+            MachineDetails,
+            LifeCircle
         },
         data() {
             return {
@@ -167,7 +172,8 @@
                 emptyPic,
                 showMachineDetails: false,
                 activeName: 'first',
-                machineInfos: {}
+                machineInfos: {},
+                showLifeCircle: false
             }
         },
         watch: {
@@ -244,8 +250,8 @@
                 this.showMachineDetails = true
                 this.machineInfos = Object.assign({}, row)
             },
-            handleClick() {
-
+            checkLifeCircle(row) {
+                this.showLifeCircle = true
             }
         }
     }
@@ -253,7 +259,6 @@
 <style lang="scss" scoped>
 .machine-info-container {
     .el-button--small {
-        float: right;
         margin: 10px 0;
         margin-right: 10px;
     }
@@ -283,7 +288,13 @@
         color: #86da76;
     }
 }
-
+.el-link {
+    display: block;
+    margin: 5px;
+}
+.el-link.is-underline:hover:after {
+    border-bottom: none;
+}
 .el-radio {
     display: block;
     margin: 10px 0;

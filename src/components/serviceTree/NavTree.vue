@@ -166,10 +166,12 @@ export default {
                 type: 'warning'
             }).then(() => {
                 this.api.serviceTree.deleteTreeNode(data.pk).then(response => {
-                    this.getServiceTreeList()
-                    this.$message.success('删除成功!')
-                    this.expandedKeys = []
-                    this.expandedKeys.push(node.parent.data.name)
+                    if (response.code === 0) {
+                        this.getServiceTreeList()
+                        this.$message.success('删除成功!')
+                        this.expandedKeys = []
+                        this.expandedKeys.push(node.parent.data.name)
+                    }
                 })
             })
         },

@@ -34,6 +34,16 @@ export default {
         }
     },
     data() {
+        const checkNodeName = (rule, value, callback) => {
+            const r = /[\u4E00-\u9FA5]|[\uFE30-\uFFA0]/gi;
+            if (value == null || String(value).trim() === '') {
+                callback(new Error('请输入节点名称'));
+            } else if (r.test(value)) {
+                callback(new Error('节点名称不能为中文'));
+            }else {
+                callback();
+            }
+        };
         return {
             size: 'medium',
             title: '添加节点',
@@ -45,7 +55,7 @@ export default {
             },
             rules: {
                 name: [
-                    { required: true, message: '请填写节点名称', trigger: 'blur' }
+                    { required: true, validator: checkNodeName, trigger: 'blur' }
                 ]
             },
             disabled: false

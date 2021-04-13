@@ -64,6 +64,10 @@
             </el-submenu>
         </el-menu>
     </div>
+    <div class="buttons">
+        <el-button type="primary" plain size="mini"><el-link type="primary" href="https://github.com/zhengyansheng/lightning" target="_blank">仓库</el-link></el-button>
+        <el-button type="primary" plain size="mini" style="margin-left:10px;"><el-link type="primary" href="http://zhaopin.aiops724.com/" target="_blank">招聘</el-link></el-button>
+    </div>
 </div>
 </template>
 
@@ -302,6 +306,14 @@ h3 {
                 border-bottom: 0;
             }
         }
+    }
+    .buttons {
+        float: right;
+        line-height: 48px;
+        height: 48px;
+    }
+    .el-link.el-link--primary:hover {
+        color: #fff;
     }
 }
 // .el-menu--popup .el-submenu .el-submenu__title {

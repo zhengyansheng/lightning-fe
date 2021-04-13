@@ -4,7 +4,13 @@
             <el-tab-pane label="标准录入" name="normal">
                 <el-form :model="ruleForm" size="small" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="账号" prop="account">
-                        <el-input v-model="ruleForm.account" placeholder="请输入账号"></el-input>
+                        <el-select v-model="ruleForm.account" placeholder="请选择账号" style="width: 100%">
+                            <el-option
+                                v-for="item in appkeyList"
+                                :key="item.en_name"
+                                :label="`${item.en_name}(${item.cn_name})`"
+                                :value="item.en_name"></el-option>
+                        </el-select>
                     </el-form-item>
                     <el-form-item label="计费方式" prop="pay_type">
                         <el-select v-model="ruleForm.pay_type" placeholder="请选择计费方式" style="width: 100%">
@@ -30,19 +36,19 @@
                     <el-form-item label="子网" prop="subnet_id">
                         <el-input v-model="ruleForm.subnet_id" placeholder="请输入子网"></el-input>
                     </el-form-item>
-                    <el-form-item label="安全组">
-                        <div v-for="(item, index) in securityGroupIds" :key="index" style="width: 90%; margin-bottom:10px;display:inline-block;">
-                            <el-input v-model="securityGroupIds[index]" placeholder="请输入安全组" style="width: 90%; margin-bottom:10px;"></el-input>
-                            <el-button type="danger" size="mini" icon="el-icon-minus" circle style="margin-left: 10px;" @click="securityGroupIds.splice(index, 1)"></el-button>
+                    <el-form-item label="安全组" required>
+                        <div v-for="(item, index) in securityGroupIds" :key="index" style="width: 90%; display:inline-block;">
+                            <el-input v-model="securityGroupIds[index]" placeholder="请输入安全组" style="width: 90%; margin-bottom:8px;"></el-input>
+                            <el-button type="danger" size="mini" icon="el-icon-minus" circle style="margin-left: 10px;" v-show="securityGroupIds.length > 1" @click="securityGroupIds.splice(index, 1)"></el-button>
                         </div>
                         <el-button type="primary" size="mini" icon="el-icon-plus" circle style="margin-left: 10px;" @click="securityGroupIds.push('')"></el-button>
                     </el-form-item>
-                    <el-form-item label="外网IP">
+                    <el-form-item label="外网IP" style="margin-bottom:0; margin-top:-14px;">
                         <el-radio v-model="outsideIP" label="is_public">公网IP</el-radio>
                         <el-radio v-model="outsideIP" label="is_eip">弹性IP</el-radio>
                     </el-form-item>
                     <el-form-item label="存储">
-                        <div v-for="(item, index) in disksList" :key="index" style="width: 90%; margin-bottom:10px;display:inline-block;">
+                        <div v-for="(item, index) in disksList" :key="index" style="width: 90%; margin-bottom:8px;display:inline-block;">
                             <el-select v-model="item.disk_type" placeholder="请选择" style="width: 28%;margin-right:10px;">
                                 <el-option key="system" label="系统盘" value="system"></el-option>
                                 <el-option key="data" label="数据盘" value="data"></el-option>
@@ -52,7 +58,7 @@
                                 <el-option key="ssd" label="SSD" value="ssd"></el-option>
                             </el-select>
                             <el-input-number v-model="item.disk_storage_size" controls-position="right" style="width: 28%" :min="100" :step="100" :step-strictly="true"></el-input-number>
-                            <el-button type="danger" size="mini" icon="el-icon-minus" circle style="margin-left: 10px;" @click="disksList.splice(index, 1)"></el-button>
+                            <el-button type="danger" size="mini" icon="el-icon-minus" circle style="margin-left: 10px;" v-show="disksList.length > 1" @click="disksList.splice(index, 1)"></el-button>
                         </div>
                         <el-button type="primary" size="mini" icon="el-icon-plus" circle style="margin-left: 10px;" @click="disksList.push({ disk_type: 'system', disk_storage_type: 'cloud', disk_storage_size: 100 })"></el-button>
                     </el-form-item>
@@ -71,7 +77,7 @@
                         <span>{{nodes}}</span>
                     </el-form-item>
                     <el-form-item label="数据">
-                        <el-input @change="handleJsonDataChange" v-model="copyForm.textarea" type="textarea" :rows="20" placeholder="请输入json数据"></el-input>
+                        <el-input @input="handleJsonDataChange" v-model="copyForm.textarea" type="textarea" :rows="20" placeholder="请输入json数据"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-button type="primary" @click="submitCopyForm('copyForm')" :disabled="disabled">生成</el-button>
@@ -138,18 +144,25 @@
                 disabled: false,
                 outsideIP: '',
                 securityGroupIds: [''],
-                disksList: [{ disk_type: 'system', disk_storage_type: 'cloud', disk_storage_size: 100 }]
+                disksList: [{ disk_type: 'system', disk_storage_type: 'cloud', disk_storage_size: 100 }],
+                appkeyList: []
             }
         },
         watch: {
             isShow(newVal) {
                 if (newVal) {
+                    this.getAppkeyLists()
                 }
             }
         },
         created() {
         },
         methods: {
+            getAppkeyLists() {
+                this.api.appkey.fetchMultiCloudAccount().then(res => {
+                    this.appkeyList = res.data
+                })
+            },
             resetForm() {
                 this.$emit('update:isShow', false)
                 this.disabled = false; 
@@ -157,7 +170,7 @@
                     this.ruleForm[key] = '';
                 }
                 this.outsideIP = ''
-                this.securityGroupIds = []
+                this.securityGroupIds = ['']
                 this.disksList = [{ disk_type: 'system', disk_storage_type: 'cloud', disk_storage_size: 100 }]
                 this.$nextTick(() => {
                     if (this.$refs['ruleForm']) this.$refs['ruleForm'].resetFields();
@@ -198,6 +211,7 @@
                             }
                             this.addMachinePaid(params);
                         } else {
+                            this.securityGroupIds = ['']
                             this.$message.warning('请填写安全组')
                         }
                     }
@@ -218,12 +232,21 @@
                 })
             },
             handleJsonDataChange(val) {
-                this.copyForm.textarea = JSON.stringify(JSON.parse(val), undefined, 4)
-                console.log(this.copyForm.textarea);
+                let object = JSON.parse(val)
+                this.$delete(object, 'CreatedAt')
+                this.$delete(object, 'UpdatedAt')
+                this.$delete(object, 'DeletedAt')
+                this.copyForm.textarea = JSON.stringify(object, undefined, 4)
+                console.log('change', this.copyForm.textarea);
             }
         }
     }
 </script>
 <style lang="scss" scoped>
-
+/deep/ .el-dialog {
+    margin-top: 30px !important;
+}
+/deep/ .el-form-item--small.el-form-item {
+    margin-bottom: 8px;
+}
 </style>

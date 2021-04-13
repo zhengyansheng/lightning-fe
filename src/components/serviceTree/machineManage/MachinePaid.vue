@@ -17,10 +17,11 @@
             <el-table-column prop="region_id" label="地域" min-width="100"></el-table-column>
             <el-table-column prop="zone_id" label="可用区" min-width="100"></el-table-column>
             <el-table-column prop="instance_type" label="配置" min-width="100"></el-table-column>
-            <el-table-column label="操作" fixed="right" width="150" align="center">
+            <el-table-column label="操作" fixed="right" width="180" align="center">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="paidData(scope.row)">交付</el-button>
                     <el-button type="text" size="small" @click="copyData(scope.row)">复制</el-button>
+                    <el-button type="text" size="small" @click="editMachineData(scope.row)">编辑</el-button>
                     <el-button type="text" size="small" @click="deleteData(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
@@ -134,6 +135,9 @@
                 document.execCommand("Copy"); 
                 oInput.style.display = 'none'
                 this.$message.success('复制成功')
+            },
+            editMachineData(row) {
+
             }
         }
     }

@@ -85,10 +85,8 @@
                 <el-tag
                     :key="index"
                     v-for="(item, index) in dynamicTags"
-                    closable
                     size="small"
-                    :disable-transitions="false"
-                    @close="deleteNodesTag(item)">
+                    :disable-transitions="false">
                     {{item.key}}: {{item.value}}
                 </el-tag>
             </div>

@@ -61,9 +61,6 @@
                     ],
                     secret_key_id: [
                         { required: true, message: '请填写密钥 - KeySecret', trigger: 'blur' }
-                    ],
-                    root_id: [
-                        { required: true, message: '请填写主账号ID', trigger: 'blur' }
                     ]
                 },
                 disabled: false
