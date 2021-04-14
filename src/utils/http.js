@@ -43,14 +43,15 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-    if (res.code === 0) {
-      return Promise.resolve(res)
-    } else {
-      Message({
-        message: res.message || 'Error',
-        type: 'error'
-      })
-    }
+    // if (res.code === 0) {
+    //   return Promise.resolve(res)
+    // } else {
+    //   Message({
+    //     message: res.message || 'Error',
+    //     type: 'error'
+    //   })
+    // }
+    return Promise.resolve(res)
     // if (res.token === undefined && res.code === undefined && response.status < 400) {
     //   return response
     // } else if (res.code !== 20000 && res.token === undefined) {
