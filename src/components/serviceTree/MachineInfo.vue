@@ -29,16 +29,6 @@
                 <el-button :size="btnSize" type="primary" @click="relatedCmdb">关联</el-button>
                 <el-button :size="btnSize" type="warning" @click="deleteData">解绑</el-button>
                 <el-button :size="btnSize" type="primary">导出</el-button>
-                <el-popover
-                    placement="bottom"
-                    width="100"
-                    trigger="click">
-                    <el-button type="text" slot="reference">更多</el-button>
-                    <el-link>开机</el-link>
-                    <el-link>关机</el-link>
-                    <el-link>重启</el-link>
-                    <el-link>下线</el-link>
-                </el-popover>
             </div>
         </div>
         <el-table ref="multipleTable" :data="tableData" v-loading="loading" stripe tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
@@ -81,11 +71,21 @@
 <!--            <el-table-column prop="remark" label="备注"></el-table-column>-->
             <!--<el-table-column prop="create_time" label="创建时间" width="170"></el-table-column>-->
 <!--            <el-table-column prop="update_time" label="变更时间" width="170"></el-table-column>-->
-            <el-table-column label="操作" v-if="nodes.level === 4" fixed="right" width="160" align="center">
+            <el-table-column label="操作" v-if="nodes.level === 4" fixed="right" width="200" align="center">
                 <template slot-scope="scope">
                     <el-button type="text" :disabled="false" :size="btnSize" @click="checkLifeCircle(scope.row)">生命周期</el-button>
                     <el-button type="text" :disabled="true" :size="btnSize" @click="deleteData(scope.row)">登陆</el-button>
                     <el-button type="text" :disabled="true" :size="btnSize" @click="deleteData(scope.row)">审计</el-button>
+                    <el-popover
+                        placement="bottom"
+                        width="100"
+                        trigger="click">
+                        <el-button type="text" :size="btnSize" slot="reference">更多</el-button>
+                        <el-button type="text" style="display:block;margin:0;width:100%;text-align:left;padding-left:10px;box-sizing:border-box;" @click="confirmOperateForMachine('开机', scope.row)">开机</el-button>
+                        <el-button type="text" style="display:block;margin:0;width:100%;text-align:left;padding-left:10px;box-sizing:border-box;" @click="confirmOperateForMachine('关机', scope.row)">关机</el-button>
+                        <el-button type="text" style="display:block;margin:0;width:100%;text-align:left;padding-left:10px;box-sizing:border-box;" @click="confirmOperateForMachine('重启', scope.row)">重启</el-button>
+                        <el-button type="text" style="display:block;margin:0;width:100%;text-align:left;padding-left:10px;box-sizing:border-box;" @click="confirmOperateForMachine('下线', scope.row)">下线</el-button>
+                    </el-popover>
                 </template>
             </el-table-column>
         </el-table>
@@ -110,7 +110,7 @@
             </el-tabs>
         </el-drawer>
 
-        <LifeCircle :isShow.sync="showLifeCircle" />
+        <LifeCircle :isShow.sync="showLifeCircle" :data="lifeCircleData" />
     </div>
 </template>
 <script>
@@ -173,6 +173,7 @@
                 showMachineDetails: false,
                 activeName: 'first',
                 machineInfos: {},
+                lifeCircleData: {},
                 showLifeCircle: false
             }
         },
@@ -223,8 +224,12 @@
                         server_ids: data
                     }
                     this.api.serviceTree.deleteMachineInfo(this.nodes.pk, params).then(data => {
-                        this.$message.success('解除绑定成功');
-                        this.getTableList();
+                        if (data.code === 0) {
+                            this.$message.success('解除绑定成功');
+                            this.getTableList();
+                        } else {
+                            this.$message.error(data.message);
+                        }
                     })
                 }).catch(() => {});
             },
@@ -237,7 +242,12 @@
                     cmdbs: val
                 }
                 this.api.serviceTree.postMachineInfo(params).then(res => {
-                    this.getTableList()
+                    if (data.code === 0) {
+                        this.$message.success('关联成功');
+                        this.getTableList()
+                    } else {
+                        this.$message.error(data.message);
+                    }
                 })
             },
             currentPageChange() {
@@ -251,7 +261,34 @@
                 this.machineInfos = Object.assign({}, row)
             },
             checkLifeCircle(row) {
-                this.showLifeCircle = true
+                this.showLifeCircle = true;
+                this.lifeCircleData = Object.assign({}, row);
+            },
+            confirmOperateForMachine(type, row) {
+                const obj = {
+                    '开机': 'start_instance',
+                    '关机': 'stop_instance',
+                    '重启': 'reboot_instance',
+                    '下线': 'destroy_instance'
+                }
+                this.$confirm(`是否确认 ${type} ？`, '提示', {
+                    cancelButtonText: '取消',
+                    confirmButtonText: '确定',
+                    type: 'warning'
+                }).then(() => {
+                    let params = {
+                        private_ip: row.private_ip
+                    }
+                    this.api.machinePaid.operateMachineStatus(obj[type], params).then(data => {
+                        console.log(data);
+                        if (data.code === 0) {
+                            this.$message.success(`${type}成功`);
+                            this.getTableList();
+                        } else {
+                            this.$message.error(data.message);
+                        }
+                    })
+                }).catch(() => {});
             }
         }
     }

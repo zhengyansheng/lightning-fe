@@ -32,6 +32,21 @@ class MachinePaid {
                 data: data
             })
         };
+        // 开机 start_instance 关机 stop_instance 重启 reboot_instance 下线 destroy_instance
+        this.operateMachineStatus = (url, data) => {
+            return request({
+                url: `${env.goUrl}/api/v1/task-scheduler/dag/${url}`,
+                method: 'post',
+                data: data
+            })
+        };
+        // 获取生命周期数据
+        this.fetchLifeCycleData = id => {
+            return request({
+                url: `${env.goUrl}/api/v1/multi-cloud/life_cycle/${id}`,
+                method: 'get'
+            })
+        };
     }
 }
 
