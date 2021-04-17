@@ -5,7 +5,7 @@
                 :title="value"
                 icon="el-icon-edit"></el-step>
         </el-steps> -->
-        <div class="max-container">
+        <div class="max-container" v-if="lifeCycleData.length">
             <div class="data-container">
                 <div class="data-item" v-for="(item, index) in lifeCycleData" :key="index">
                     <div class="data-infos" v-for="(value, key) in item" :key="key">
@@ -17,6 +17,9 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-else>
+            暂无数据
         </div>
         <span slot="footer" class="dialog-footer">
             <el-button size="small" @click="closeDia">取 消</el-button>
@@ -41,8 +44,8 @@
         watch: {
             isShow(newVal) {
                 if (newVal) {
-                    this.getLifeCycleData('i-2ze2gbg1ppwpqepcn5x8')
-                    // this.getLifeCycleData(this.data.instance_id)
+                    // this.getLifeCycleData('i-2ze2gbg1ppwpqepcn5x8')
+                    this.getLifeCycleData(this.data.instance_id)
                 }
             }
         },

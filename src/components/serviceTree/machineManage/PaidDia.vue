@@ -153,5 +153,10 @@
     }
 </script>
 <style lang="scss" scoped>
-
+/deep/ .el-dialog {
+    margin-top: 30px !important;
+}
+/deep/ .el-form-item--small.el-form-item {
+    margin-bottom: 8px;
+}
 </style>
