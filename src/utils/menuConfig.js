@@ -103,6 +103,19 @@ const menuConfig = [{
 //    go() {
 //        window.location.href = '/corp'
 //    }
+}, {
+    title: '资源数据中心',
+    index: '5',
+    children: [
+        {
+            title: '表管理',
+            index: '5-1',
+            routeName: 'tableclassify',
+            go() {
+                window.location.href = '/tableclassify'
+            },
+        }
+    ]
 }
 // , {
 //     title: '资源管理',
