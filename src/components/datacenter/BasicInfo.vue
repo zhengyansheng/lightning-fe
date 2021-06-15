@@ -16,14 +16,19 @@
             <el-switch v-model="form.is_forbid_bind" size="small"></el-switch>
         </el-form-item>
         <el-form-item label="选择分类" prop="pid" required>
-            <el-select v-model="form.pid" placeholder="请选择" size="small">
+            <!-- <el-select v-model="form.pid" placeholder="请选择" size="small">
                 <el-option
                     v-for="item in typeList"
                     :key="item.id"
                     :label="item.name"
                     :value="item.id">
                 </el-option>
-            </el-select>
+            </el-select> -->
+            <el-cascader
+                v-model="form.pid"
+                :options="options"
+                :props="{ expandTrigger: 'hover' }"
+                ></el-cascader>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" size="small"></el-input>

@@ -42,6 +42,8 @@
                 if (newVal) {
                     console.log(111, this.editData);
                     this.isEdit = Object.keys(this.editData).length
+                } else {
+                    this.isEdit = false;
                 }
             },
             isEdit(newVal) {
