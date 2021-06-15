@@ -28,15 +28,19 @@
                         :value="item.id">
                     </el-option>
                 </el-select>
-                <el-button plain type="primary" size="small" @click="searchData" style="margin-lrft: 10px;">查询</el-button>
+                <el-button plain type="primary" size="small" @click="searchData" style="margin-left: 10px;">查询</el-button>
             </div>
             <el-table :data="innerTableData" border style="width: 100%">
                 <el-table-column type="index" width="50" label="序号"></el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="alias" label="别名"></el-table-column>
-                <el-table-column prop="record_log" label="日志记录"></el-table-column>
-                <el-table-column prop="is_forbid_bind" label="禁止关联"></el-table-column>
-                <el-table-column prop="is_foreign_key" label="多对多关联"></el-table-column>
+                <el-table-column prop="record_log" label="日志记录">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.record_log" disabled size="mini"></el-switch>
+                    </template>
+                </el-table-column>
+                <!-- <el-table-column prop="is_forbid_bind" label="禁止关联"></el-table-column>
+                <el-table-column prop="is_foreign_key" label="多对多关联"></el-table-column> -->
                 <el-table-column label="禁止关联｜多对多关联｜操作" fixed="right" width="250" align="center">
                     <template slot-scope="scope">
                         <el-switch v-model="forbid" size="mini"></el-switch>
@@ -74,9 +78,13 @@
                 foreignKey: true,
             }
         },
+        watch: {
+            editData(newVal) {
+                this.tableData = newVal
+            }
+        },
         created() {
             this.tableData = this.editData;
-            
         },
         methods: {
             // 解绑
@@ -96,12 +104,17 @@
             },
             setRelation() {
                 this.dialogVisible=true;
-                this.getTypeList();
+                // this.getTypeList();
                 this.getSelectList()
             },
             // 提交
             confirmSubmit() {
                 
+            },
+            getSelectList() {
+                this.api.datacenter.getMainTypeList().then(res => {
+                    this.selectLists = res.results;
+                })
             },
             getTypeList(pid) {
                 let params = {}
@@ -121,15 +134,6 @@
             },
             searchData() {
                 this.getTypeList(this.keyword)
-            },
-            getSelectList() {
-                this.api.datacenter.fetchTableClassifyTree().then(res => {
-                    if (res.code === 0) {
-                        this.selectLists = res.data
-                    } else {
-                        this.$message.error(res.message)
-                    }
-                })
             },
             editRelation(row) {
                 let params = {
