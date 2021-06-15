@@ -26,7 +26,13 @@
                     <el-option label="IP" value="IP"></el-option>
                     <el-option label="Str" value="Str"></el-option>
                     <el-option label="Int" value="Int"></el-option>
+                    <el-option label="Choices" value="Choices"></el-option>
                 </el-select>
+            </div>
+            <div class="group" v-if="item.type==='Choices'">
+                <el-input placeholder="请输入内容" v-model="item.order">
+                    <template slot="prepend">可选值</template>
+                </el-input>
             </div>
             <div class="group select-group" v-for="(selects, indexs) of item.rules" :key="indexs">
                 <el-select v-model="selects.name" slot="append" placeholder="请选择">
@@ -128,7 +134,9 @@
             disabled() {
                 return (s, item) => {
                     console.log('sssss', s);
-                    return (s.value === 'lens' && item.type !=='Str') || (s.value === 'max' && item.type !=='Int') || (s.value === 'min' && item.type !=='Int')
+                    return (s.value === 'lens' && item.type !=='Str') ||
+                            ((s.value === 'max' || s.value === 'min') && item.type !=='Int') ||
+                            (item.type =='Choices' && (s.value !== 'default' || s.value === 'unique'))
                 }
             },
             showRulesList() {
@@ -251,7 +259,6 @@
                     rules
                 }
                 if (this.isEdit) {
-                    console.log('this.editData', this.editData);
                     this.api.datacenter.editNewTableField(params, this.editData.field_id).then(res => {
                         if (res.code === 0) {
                             this.$message.success('修改成功');

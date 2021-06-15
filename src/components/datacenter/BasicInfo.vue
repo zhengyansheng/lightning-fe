@@ -95,7 +95,7 @@
                             'Content-Type': 'multipart/form-data'
                             }
                         }
-                        this.api.datacenter.editTableClassify(this.form.pid, formData, config).then(res => {
+                        this.api.datacenter.editTableClassify(this.pid, formData, config).then(res => {
                             if (res.code === 0) {
                                 this.$message.success('编辑成功');
                                 this.closeDia();
