@@ -66,11 +66,19 @@ class Datacenter {
                 data: data
             })
         }
-        // 编辑表字段
+        // 新增表字段
         this.editTableField = query => {
             return request({
                 url: `${env.cmdbUrl}/api/v1/cmdb/table-field/`,
                 method: 'post',
+                data: query
+            })
+        }
+        // 编辑表字段 
+        this.editNewTableField = (query, id) => {
+            return request({
+                url: `${env.cmdbUrl}/api/v1/cmdb/table-field/${id}/`,
+                method: 'put',
                 data: query
             })
         }

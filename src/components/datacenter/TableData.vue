@@ -34,7 +34,8 @@
                     :disabled="disabled(s, item)"></el-option>
                 </el-select>
                 <el-input v-if="selects.name!=='unique' && selects.name!=='not_null'" placeholder="请输入内容" v-model="selects.value" />
-                <div v-else class="switch-container"><el-switch v-model="selects.value"></el-switch></div>
+                <el-input v-else placeholder="请输入内容" v-model="selectsValue" readonly />
+                <!-- <div v-else class="switch-container"><el-switch disabled v-model="selectsValue"></el-switch></div> -->
                 <span class="el-icon-circle-close closed" v-if="isEdit" @click="listDelete(indexs, item.rules)"></span>
             </div>
             <div class="group btn-group" v-if="isEdit">
@@ -61,6 +62,9 @@
             isEdit: {
                 type: Boolean,
                 default: true
+            },
+            pid: {
+                type: Number
             }
         },
         data() {
@@ -115,7 +119,9 @@
                     guid: false,
                     type: 'IP',
                     rules: []
-                }
+                },
+                selectsValue: true,
+                isEdit: false
             }
         },
         computed: {
@@ -157,13 +163,21 @@
                 let list = [];
                 let fields = this.editData.fields;
                 let rules = this.editData.rules;
-                if (!fields || !Object.keys(fields).length) return emptylist;
+                if (!fields || !Object.keys(fields).length) {
+                    this.isEdit = false;
+                    return emptylist;
+                }
+                this.isEdit = true;
                 for (let key in fields) {
                     let oneData = {
                         name: key
                     }
                     for(let i in fields[key]) {
-                        oneData[i] = fields[key][i]
+                        if (i === 'name') {
+                            oneData['alias'] = fields[key][i]
+                        } else {
+                            oneData[i] = fields[key][i]
+                        }
                     }
                     if (Object.keys(rules).length && rules[key] && Object.keys(rules[key]).length) {
                         oneData['rules'] = []
@@ -208,6 +222,8 @@
                 if (!this.displayLists.length) return false;
                 let fields = {}
                 let rules = {}
+                // 判断guid 是否是唯一的true
+                let guidIndex = 0
                 this.displayLists.forEach(item => {
                     let key = item.name
                     let fieldsObj = {}
@@ -226,20 +242,34 @@
                     })
                     fields = Object.assign(fields, fieldsObj)
                     rules = Object.assign(rules, rulesObj)
+                    if (item.guid) guidIndex++
                 })
+                if (guidIndex !== 1) return this.$message.error('唯一标识有且只能有一个为true');
                 let params = {
                     table_classify: this.editData.id,
                     fields,
                     rules
                 }
-                this.api.datacenter.editTableField(params).then(res => {
-                    if (res.code === 0) {
-                        this.$message.success('修改成功');
-                        this.closeDia();
-                    } else {
-                        this.$message.error(res.message)
-                    }
-                })
+                if (this.isEdit) {
+                    console.log('this.editData', this.editData);
+                    this.api.datacenter.editNewTableField(params, this.editData.field_id).then(res => {
+                        if (res.code === 0) {
+                            this.$message.success('修改成功');
+                            this.closeDia();
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                    })
+                } else {
+                    this.api.datacenter.editTableField(params).then(res => {
+                        if (res.code === 0) {
+                            this.$message.success('修改成功');
+                            this.closeDia();
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                    })
+                }
             }
         }
     }
@@ -252,7 +282,9 @@
         justify-content: flex-start;
         align-items: center;
         flex-wrap: wrap;
-        padding-bottom: 10px;
+        // padding-bottom: 10px;
+        border-bottom: 1px dashed #DCDFE6;
+        margin-bottom: 10px;
     }
     .group {
         width: 200px;

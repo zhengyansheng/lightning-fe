@@ -10,7 +10,7 @@
             </el-tab-pane>
             <el-tab-pane label="字段管理" name="manage">
                 <!-- <WordsManage /> -->
-                <TableData :editData="cardInfo" @close="closeDia" />
+                <TableData :editData="cardInfo" @close="closeDia" :pid="pid" />
             </el-tab-pane>
             <el-tab-pane label="关系绑定" name="relation">
                 <Relation :editData="cardInfo.children" :pid="pid" />
