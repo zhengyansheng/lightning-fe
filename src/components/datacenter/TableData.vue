@@ -3,12 +3,12 @@
         <div class="one-line" v-for="(item, wholelineIndex) in displayLists" :key="wholelineIndex">
             <div class="group">
                 <el-input placeholder="请输入内容" v-model="item.name" @change="handleChange">
-                    <template slot="prepend">名称</template>
+                    <template slot="prepend">字段名</template>
                 </el-input>
             </div>
             <div class="group">
                 <el-input placeholder="请输入内容" v-model="item.alias">
-                    <template slot="prepend">别名</template>
+                    <template slot="prepend">中文名</template>
                 </el-input>
             </div>
             <div class="group">
@@ -30,7 +30,7 @@
                 </el-select>
             </div>
             <div class="group" v-if="item.type==='Choices'">
-                <el-input placeholder="请输入内容" v-model="item.order">
+                <el-input placeholder="请输入内容" v-model="item.selectLists">
                     <template slot="prepend">可选值</template>
                 </el-input>
             </div>
@@ -111,13 +111,6 @@
                         value: 'min'
                     }
                 ],
-                name: '',
-                alias: '',
-                select: '',
-                order: '',
-                guid: '',
-                isSwitch: true,
-                type: 'IP',
                 displayLists: {
                     name: '',
                     alias: '',
@@ -126,14 +119,13 @@
                     type: 'IP',
                     rules: []
                 },
-                selectsValue: true,
-                isEdit: false
+                selectsValue: 'true',
+                isCurrentEdit: false
             }
         },
         computed: {
             disabled() {
                 return (s, item) => {
-                    console.log('sssss', s);
                     return (s.value === 'lens' && item.type !=='Str') ||
                             ((s.value === 'max' || s.value === 'min') && item.type !=='Int') ||
                             (item.type =='Choices' && (s.value !== 'default' || s.value === 'unique'))
@@ -172,10 +164,10 @@
                 let fields = this.editData.fields;
                 let rules = this.editData.rules;
                 if (!fields || !Object.keys(fields).length) {
-                    this.isEdit = false;
+                    this.isCurrentEdit = false;
                     return emptylist;
                 }
-                this.isEdit = true;
+                this.isCurrentEdit = true;
                 for (let key in fields) {
                     let oneData = {
                         name: key
@@ -190,12 +182,25 @@
                     if (Object.keys(rules).length && rules[key] && Object.keys(rules[key]).length) {
                         oneData['rules'] = []
                         for(let r in rules[key]) {
+                            console.log('rrrr', r);
                             oneData[r] = rules[key][r]
                             if (r !== 'type') {
-                                oneData['rules'].push({
-                                    name: r,
-                                    value: rules[key][r]
-                                })
+                                if (r === 'select_list') {
+                                    oneData['rules'].push({
+                                        name: 'selectLists',
+                                        value: rules[key][r].join('')
+                                    })
+                                } else if (r === 'unique' || r === 'not_null') {
+                                    oneData['rules'].push({
+                                        name: r,
+                                        value: 'true'
+                                    })
+                                } else {
+                                    oneData['rules'].push({
+                                        name: r,
+                                        value: rules[key][r]
+                                    })
+                                }
                             }
                         }
                     }
@@ -232,6 +237,7 @@
                 let rules = {}
                 // 判断guid 是否是唯一的true
                 let guidIndex = 0
+                let choiceIsError = false
                 this.displayLists.forEach(item => {
                     let key = item.name
                     let fieldsObj = {}
@@ -242,9 +248,24 @@
                     }
                     let rulesObj = {}
                     rulesObj[key] = { type: item.type }
+                    if (item.type === 'Choices') {
+                        console.log('this.displayLists', item, item.selectLists);
+                        rulesObj[key] = Object.assign(rulesObj[key], {
+                            select_list: item.selectLists.split(',')
+                        })
+                    }
+                    console.log('33333', rulesObj);
                     item.rules.forEach(rule => {
                         let obj = {}
+                        console.log('9999999', rule);
                         if (rule.name === 'unique' || rule.name === 'not_null') obj[rule.name] = true
+                        else if (item.type === 'Choices' && rule.name === 'default') {
+                            if (item.selectLists.split(',').indexOf(rule.value) < 0) {
+                                choiceIsError = true
+                                return this.$message.error('default字段的取值范围在可选值内')
+                            }
+                            obj[rule.name] = rule.value
+                        }
                         else obj[rule.name] = rule.value
                         rulesObj[key] = Object.assign(obj, rulesObj[key])
                     })
@@ -253,12 +274,13 @@
                     if (item.guid) guidIndex++
                 })
                 if (guidIndex !== 1) return this.$message.error('唯一标识有且只能有一个为true');
+                if (choiceIsError) return false;
                 let params = {
                     table_classify: this.editData.id,
                     fields,
                     rules
                 }
-                if (this.isEdit) {
+                if (this.isCurrentEdit) {
                     this.api.datacenter.editNewTableField(params, this.editData.field_id).then(res => {
                         if (res.code === 0) {
                             this.$message.success('修改成功');
