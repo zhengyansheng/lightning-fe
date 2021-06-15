@@ -38,9 +38,21 @@
                 <el-table-column prop="parent_name" label="分类名"></el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="alias" label="别名"></el-table-column>
-                <el-table-column prop="record_log" label="日志记录"></el-table-column>
-                <el-table-column prop="is_forbid_bind" label="禁止关联"></el-table-column>
-                <el-table-column prop="is_foreign_key" label="多对多关联"></el-table-column>
+                <el-table-column prop="record_log" label="日志记录">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.record_log" disabled size="mini"></el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="is_forbid_bind" label="禁止关联">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.is_forbid_bind" disabled size="mini"></el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="is_foreign_key" label="多对多关联">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.is_foreign_key" disabled size="mini"></el-switch>
+                    </template>
+                </el-table-column>
             </el-table>
             <el-tag effect="plain" style="margin-top: 20px;margin-bottom: 10px;">关联我的</el-tag>
             <el-table :data="cardInfo.relevant" border style="width: 100%">
@@ -48,9 +60,21 @@
                 <el-table-column prop="parent_name" label="分类名"></el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="alias" label="别名"></el-table-column>
-                <el-table-column prop="record_log" label="日志记录"></el-table-column>
-                <el-table-column prop="is_forbid_bind" label="禁止关联"></el-table-column>
-                <el-table-column prop="is_foreign_key" label="多对多关联"></el-table-column>
+                <el-table-column prop="record_log" label="日志记录">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.record_log" disabled size="mini"></el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="is_forbid_bind" label="禁止关联">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.is_forbid_bind" disabled size="mini"></el-switch>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="is_foreign_key" label="多对多关联">
+                    <template slot-scope="scope">
+                        <el-switch v-model="scope.row.is_foreign_key" disabled size="mini"></el-switch>
+                    </template>
+                </el-table-column>
             </el-table>
         </div>
     </div>
@@ -61,7 +85,7 @@
         name: '',
         data() {
             return {
-                currentNav: 'table',
+                currentNav: 'basicInfo',
                 form: {
 
                 },

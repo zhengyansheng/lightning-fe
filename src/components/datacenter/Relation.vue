@@ -112,7 +112,6 @@
             },
             setRelation() {
                 this.dialogVisible=true;
-                // this.getTypeList();
                 this.getSelectList()
             },
             // 提交
@@ -154,7 +153,9 @@
                     if (res.code === 0) {
                         this.$message.success('绑定成功');
                         this.dialogVisible=false;
-                        this.$parent.getEditCardInfo();
+                        this.keyword = '';
+                        this.innerTableData = [];
+                        this.$emit('refresh')
                     } else {
                         this.$message.error(res.message)
                     }

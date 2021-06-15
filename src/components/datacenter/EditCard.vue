@@ -13,7 +13,7 @@
                 <TableData :editData="cardInfo" @close="closeDia" :pid="pid" />
             </el-tab-pane>
             <el-tab-pane label="关系绑定" name="relation">
-                <Relation :editData="cardInfo.children" :pid="pid" />
+                <Relation :editData="cardInfo.children" :pid="pid" @refresh="getEditCardInfo" />
             </el-tab-pane>
         </el-tabs>
         <!-- <span slot="footer" class="dialog-footer">
@@ -68,6 +68,7 @@
             getEditCardInfo() {
                 this.api.datacenter.getEditCardInfo(this.pid).then(res => {
                     this.cardInfo = res.data
+                    this.$forceUpdate();
                 })
             },
         }
