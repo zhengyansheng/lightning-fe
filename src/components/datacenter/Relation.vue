@@ -129,7 +129,7 @@
                 if (pid) {
                     params = {
                         pid: pid,
-                        is_forbid_bind: true
+                        is_forbid_bind: false
                     }
                 }
                 this.api.datacenter.getTypeList(params).then(res => {
