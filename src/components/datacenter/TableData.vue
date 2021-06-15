@@ -1,56 +1,57 @@
 <template>
     <div class="table-data">
-        <div class="one-line" v-for="(item, wholelineIndex) in displayLists" :key="wholelineIndex">
-            <div class="group">
-                <el-input placeholder="请输入内容" v-model="item.name" @change="handleChange">
-                    <template slot="prepend">字段名</template>
-                </el-input>
+        <div style="max-height:500px;overflow-y:auto;">
+            <div class="one-line" v-for="(item, wholelineIndex) in displayLists" :key="wholelineIndex">
+                <div class="group">
+                    <el-input placeholder="请输入内容" v-model="item.name" @change="handleChange">
+                        <template slot="prepend">字段名</template>
+                    </el-input>
+                </div>
+                <div class="group">
+                    <el-input placeholder="请输入内容" v-model="item.alias">
+                        <template slot="prepend">中文名</template>
+                    </el-input>
+                </div>
+                <div class="group">
+                    <el-input placeholder="请输入内容" v-model="item.order">
+                        <template slot="prepend">排序编号</template>
+                    </el-input>
+                </div>
+                <div class="group switch-group">
+                    <div class="el-input-group__prepend left-label">唯一标识</div>
+                    <div class="el-input-group__append right-label"><el-switch v-model="item.guid"></el-switch></div>
+                </div>
+                <div class="group type-group">
+                    <div class="el-input-group__prepend left-label">类型</div>
+                    <el-select v-model="item.type" slot="append" placeholder="请选择">
+                        <el-option label="IP" value="IP"></el-option>
+                        <el-option label="Str" value="Str"></el-option>
+                        <el-option label="Int" value="Int"></el-option>
+                        <el-option label="Choices" value="Choices"></el-option>
+                    </el-select>
+                </div>
+                <div class="group" v-if="item.type==='Choices'">
+                    <el-input placeholder="请输入内容" v-model="item.selectLists">
+                        <template slot="prepend">可选值</template>
+                    </el-input>
+                </div>
+                <div class="group select-group" v-for="(selects, indexs) of item.rules" :key="indexs">
+                    <el-select v-model="selects.name" slot="append" placeholder="请选择">
+                        <el-option :key="index" :label="s.label" :value="s.value" v-for="(s, index) of showRulesList(selects.name, item.rules)"
+                        :disabled="disabled(s, item)"></el-option>
+                    </el-select>
+                    <el-input v-if="selects.name!=='unique' && selects.name!=='not_null'" placeholder="请输入内容" v-model="selects.value" />
+                    <el-input v-else placeholder="请输入内容" v-model="selectsValue" readonly />
+                    <!-- <div v-else class="switch-container"><el-switch disabled v-model="selectsValue"></el-switch></div> -->
+                    <span class="el-icon-circle-close closed" v-if="isEdit" @click="listDelete(indexs, item.rules)"></span>
+                </div>
+                <div class="group btn-group" v-if="isEdit">
+                    <el-button type="primary" icon="el-icon-plus" circle @click="listAdd(item.rules)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle @click="listDeleteWholeLine(wholelineIndex)"></el-button>
+                </div>
             </div>
-            <div class="group">
-                <el-input placeholder="请输入内容" v-model="item.alias">
-                    <template slot="prepend">中文名</template>
-                </el-input>
-            </div>
-            <div class="group">
-                <el-input placeholder="请输入内容" v-model="item.order">
-                    <template slot="prepend">排序编号</template>
-                </el-input>
-            </div>
-            <div class="group switch-group">
-                <div class="el-input-group__prepend left-label">唯一标识</div>
-                <div class="el-input-group__append right-label"><el-switch v-model="item.guid"></el-switch></div>
-            </div>
-            <div class="group type-group">
-                <div class="el-input-group__prepend left-label">类型</div>
-                <el-select v-model="item.type" slot="append" placeholder="请选择">
-                    <el-option label="IP" value="IP"></el-option>
-                    <el-option label="Str" value="Str"></el-option>
-                    <el-option label="Int" value="Int"></el-option>
-                    <el-option label="Choices" value="Choices"></el-option>
-                </el-select>
-            </div>
-            <div class="group" v-if="item.type==='Choices'">
-                <el-input placeholder="请输入内容" v-model="item.selectLists">
-                    <template slot="prepend">可选值</template>
-                </el-input>
-            </div>
-            <div class="group select-group" v-for="(selects, indexs) of item.rules" :key="indexs">
-                <el-select v-model="selects.name" slot="append" placeholder="请选择">
-                    <el-option :key="index" :label="s.label" :value="s.value" v-for="(s, index) of showRulesList(selects.name, item.rules)"
-                    :disabled="disabled(s, item)"></el-option>
-                </el-select>
-                <el-input v-if="selects.name!=='unique' && selects.name!=='not_null'" placeholder="请输入内容" v-model="selects.value" />
-                <el-input v-else placeholder="请输入内容" v-model="selectsValue" readonly />
-                <!-- <div v-else class="switch-container"><el-switch disabled v-model="selectsValue"></el-switch></div> -->
-                <span class="el-icon-circle-close closed" v-if="isEdit" @click="listDelete(indexs, item.rules)"></span>
-            </div>
-            <div class="group btn-group" v-if="isEdit">
-                <el-button type="primary" icon="el-icon-plus" circle @click="listAdd(item.rules)"></el-button>
-                <el-button type="danger" icon="el-icon-delete" circle @click="listDeleteWholeLine(wholelineIndex)"></el-button>
-            </div>
+            <div class="add-whole-line" v-if="isEdit"><el-button type="success" icon="el-icon-plus" circle @click="listAddWholeLine"></el-button></div>
         </div>
-        <div class="add-whole-line" v-if="isEdit"><el-button type="success" icon="el-icon-plus" circle @click="listAddWholeLine"></el-button></div>
-
         <el-divider v-if="isEdit"></el-divider>
         <div v-if="isEdit" style="float: right;">
             <el-button size="small" @click="closeDia">取 消</el-button>
@@ -310,10 +311,14 @@
         flex-direction: row;
         justify-content: flex-start;
         align-items: center;
-        flex-wrap: wrap;
+        // flex-wrap: wrap;
         // padding-bottom: 10px;
         border-bottom: 1px dashed #DCDFE6;
         margin-bottom: 10px;
+        overflow-x: auto;
+        width: auto;
+        height: 55px;
+        padding-top: 5px;
     }
     .group {
         width: 200px;
@@ -323,6 +328,7 @@
         align-items: center;
         margin-right: 20px;
         margin-bottom: 10px;
+        flex-shrink: 0;
         // &:first-child {
         //     margin-left: 0;
         // }

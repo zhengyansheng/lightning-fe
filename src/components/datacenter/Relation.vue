@@ -1,13 +1,21 @@
 <template>
     <div class="container">
         <el-button size="small" type="primary" style="margin-bottom:10px;float: right;" plain @click="setRelation">绑定</el-button>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table :data="tableData" border style="width: 100%" max-height="400">
             <el-table-column type="index" width="50" label="序号"></el-table-column>
             <el-table-column prop="parent_name" label="分类名"></el-table-column>
             <el-table-column prop="name" label="名称"></el-table-column>
             <el-table-column prop="alias" label="别名"></el-table-column>
-            <el-table-column prop="record_log" label="日志记录"></el-table-column>
-            <el-table-column prop="is_forbid_bind" label="禁止关联"></el-table-column>
+            <el-table-column prop="record_log" label="日志记录">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.record_log" disabled size="mini"></el-switch>
+                </template>
+            </el-table-column>
+            <el-table-column prop="is_forbid_bind" label="禁止关联">
+                <template slot-scope="scope">
+                    <el-switch v-model="scope.row.is_forbid_bind" disabled size="mini"></el-switch>
+                </template>
+            </el-table-column>
             <el-table-column label="操作" fixed="right" width="100" align="center">
                 <template slot-scope="scope">
                     <el-button type="text" size="small" @click="cancelData(scope.row, scope.$index, tableData)">解绑</el-button>
@@ -30,7 +38,7 @@
                 </el-select>
                 <el-button plain type="primary" size="small" @click="searchData" style="margin-left: 10px;">查询</el-button>
             </div>
-            <el-table :data="innerTableData" border style="width: 100%">
+            <el-table :data="innerTableData" border style="width: 100%" max-height="400">
                 <el-table-column type="index" width="50" label="序号"></el-table-column>
                 <el-table-column prop="name" label="名称"></el-table-column>
                 <el-table-column prop="alias" label="别名"></el-table-column>
