@@ -1,6 +1,6 @@
 <template>
     <div class="table-data">
-        <div style="max-height:500px;overflow-y:auto;">
+        <div style="max-height:500px;overflow:auto;">
             <div class="one-line" v-for="(item, wholelineIndex) in displayLists" :key="wholelineIndex">
                 <div class="group">
                     <el-input placeholder="请输入内容" v-model="item.name" @change="handleChange">
@@ -315,7 +315,7 @@
         // padding-bottom: 10px;
         border-bottom: 1px dashed #DCDFE6;
         margin-bottom: 10px;
-        overflow-x: auto;
+        // overflow-x: auto;
         width: auto;
         height: 55px;
         padding-top: 5px;
