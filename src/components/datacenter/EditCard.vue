@@ -6,7 +6,7 @@
         @close="closeDia">
         <el-tabs v-model="activeName" style="position: relative;top: -28px;">
             <el-tab-pane label="基本信息" name="base">
-                <BasicInfo :editData="cardInfo" @close="closeDia" />
+                <BasicInfo :editData="cardInfo" :pid="pid" @close="closeDia" />
             </el-tab-pane>
             <el-tab-pane label="字段管理" name="manage">
                 <!-- <WordsManage /> -->
@@ -58,7 +58,7 @@
             }
         },
         created() {
-            
+            console.log('editCard', this.pid);
         },
         methods: {
             closeDia() {

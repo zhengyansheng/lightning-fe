@@ -16,19 +16,14 @@
             <el-switch v-model="form.is_forbid_bind" size="small"></el-switch>
         </el-form-item>
         <el-form-item label="选择分类" prop="pid" required>
-            <!-- <el-select v-model="form.pid" placeholder="请选择" size="small">
+            <el-select v-model="form.pid" placeholder="请选择" size="small">
                 <el-option
                     v-for="item in typeList"
                     :key="item.id"
                     :label="item.name"
                     :value="item.id">
                 </el-option>
-            </el-select> -->
-            <el-cascader
-                v-model="form.pid"
-                :options="options"
-                :props="{ expandTrigger: 'hover' }"
-                ></el-cascader>
+            </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
             <el-input type="textarea" v-model="form.remark" size="small"></el-input>
@@ -47,6 +42,9 @@
         props: {
             editData: {
                 type: Object
+            },
+            pid: {
+                type: Number
             }
         },
         data() {
@@ -60,7 +58,7 @@
                     is_forbid_bind: false,
                     pid: '',
                     remark: ''
-                }
+                },
             }
         },
         watch: {
@@ -80,12 +78,8 @@
                 this.form.icon = event.target.files[0]
             },
             getTypeList() {
-                this.api.datacenter.getTypeList().then(res => {
-                    if (res.code === 0) {
-                        this.typeList = res.data.results;
-                    } else {
-                        this.$message.error(res.message)
-                    }
+                this.api.datacenter.getMainTypeList().then(res => {
+                    this.typeList = res.results;
                 })
             },
             confirmSubmit() {
@@ -114,6 +108,9 @@
                         return false;
                     }
                 });
+            },
+            getCheckedNodes(nodes) {
+                console.log(111, nodes);
             }
         }
     }

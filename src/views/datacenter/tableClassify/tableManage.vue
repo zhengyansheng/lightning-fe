@@ -33,7 +33,7 @@
                                 </div>
                                 <div class="card-buttons">
                                     <el-button plain type="primary" size="mini" icon="el-icon-edit" circle @click.stop="editCard(item.id)"></el-button>
-                                    <el-button plain type="danger" size="mini" icon="el-icon-delete" circle @click.stop="deleteCard(items)"></el-button>
+                                    <el-button plain type="danger" size="mini" icon="el-icon-delete" circle @click.stop="deleteCard(item.id)"></el-button>
                                 </div>
                             </div>
                         </el-card>
@@ -114,7 +114,20 @@
                 this.pidForCardData = data
             },
             deleteCard(data) {
-
+                this.$confirm('是否确认删除当前卡片?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.api.datacenter.deleteTableClassify(data).then(res => {
+                        if (res.code === 0) {
+                            this.$message.success('删除成功')
+                            this.fetchTableClassifyTree()
+                        } else {
+                            this.$message.error(res.message)
+                        }
+                    })
+                }).catch(() => {});
             },
             checkDetails(data) {
                 console.log('11111');

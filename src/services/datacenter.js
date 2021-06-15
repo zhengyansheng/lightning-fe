@@ -50,6 +50,14 @@ class Datacenter {
                 params: data
             })
         }
+        // 获取主分类列表
+        this.getMainTypeList = data => {
+            return request({
+                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/classify/`,
+                method: 'get',
+                params: data
+            })
+        }
         // 解除绑定 
         this.setUnrelation = data => {
             return request({

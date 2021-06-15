@@ -33,7 +33,7 @@
                     <el-option :key="index" :label="s.label" :value="s.value" v-for="(s, index) of showRulesList(selects.name, item.rules)"
                     :disabled="disabled(s, item)"></el-option>
                 </el-select>
-                <el-input v-if="selects.name!=='unique'" placeholder="请输入内容" v-model="selects.value" />
+                <el-input v-if="selects.name!=='unique' && selects.name!=='not_null'" placeholder="请输入内容" v-model="selects.value" />
                 <div v-else class="switch-container"><el-switch v-model="selects.value"></el-switch></div>
                 <span class="el-icon-circle-close closed" v-if="isEdit" @click="listDelete(indexs, item.rules)"></span>
             </div>
@@ -153,13 +153,14 @@
                 this.$forceUpdate()
             },
             initList() {
-                let list = []
+                let emptylist = [{name: '', alias: '', order: 0, guid: false, type: 'IP', rules: []}]
+                let list = [];
                 let fields = this.editData.fields;
                 let rules = this.editData.rules;
-                if (!fields || !Object.keys(fields).length) return list;
+                if (!fields || !Object.keys(fields).length) return emptylist;
                 for (let key in fields) {
                     let oneData = {
-                        alias: key
+                        name: key
                     }
                     for(let i in fields[key]) {
                         oneData[i] = fields[key][i]
@@ -208,18 +209,18 @@
                 let fields = {}
                 let rules = {}
                 this.displayLists.forEach(item => {
-                    let key = item.alias
+                    let key = item.name
                     let fieldsObj = {}
                     fieldsObj[key] = {
                         guid: item.guid,
-                        name: item.name,
+                        name: item.alias,
                         order: Number(item.order),
                     }
                     let rulesObj = {}
                     rulesObj[key] = { type: item.type }
                     item.rules.forEach(rule => {
                         let obj = {}
-                        if (rule.name === 'unique') obj[rule.name] = rule.value || false
+                        if (rule.name === 'unique' || rule.name === 'not_null') obj[rule.name] = true
                         else obj[rule.name] = rule.value
                         rulesObj[key] = Object.assign(obj, rulesObj[key])
                     })
