@@ -13,7 +13,7 @@
                     </el-input>
                 </div>
                 <div class="group">
-                    <el-input placeholder="请输入内容" v-model="item.order" :disabled="!isEdit">
+                    <el-input placeholder="请输入内容" v-model="item.order" :disabled="!isEdit" type="number" :min="0">
                         <template slot="prepend">排序编号</template>
                     </el-input>
                 </div>
