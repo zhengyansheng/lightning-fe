@@ -63,12 +63,19 @@
         },
         watch: {
             editData(newVal) {
-                if (newVal) this.form = Object.assign({}, this.editData);
+                if (newVal) {
+                    for(let i in this.form) {
+                        this.form[i] = newVal[i]
+                    }
+                }
             }
         },
         created() {
             this.getTypeList();
-            this.form = Object.assign({}, this.editData)
+            for(let i in this.form) {
+                this.form[i] = this.editData[i]
+            }
+            // this.form = Object.assign({}, this.editData)
         },
         methods: {
             closeDia() {
