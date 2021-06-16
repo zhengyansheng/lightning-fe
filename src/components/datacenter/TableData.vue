@@ -3,27 +3,27 @@
         <div style="max-height:500px;overflow:auto;">
             <div class="one-line" v-for="(item, wholelineIndex) in displayLists" :key="wholelineIndex">
                 <div class="group">
-                    <el-input placeholder="请输入内容" v-model="item.name" @change="handleChange">
+                    <el-input placeholder="请输入内容" v-model="item.name" @change="handleChange" :disabled="!isEdit">
                         <template slot="prepend">字段名</template>
                     </el-input>
                 </div>
                 <div class="group">
-                    <el-input placeholder="请输入内容" v-model="item.alias">
+                    <el-input placeholder="请输入内容" v-model="item.alias" :disabled="!isEdit">
                         <template slot="prepend">中文名</template>
                     </el-input>
                 </div>
                 <div class="group">
-                    <el-input placeholder="请输入内容" v-model="item.order">
+                    <el-input placeholder="请输入内容" v-model="item.order" :disabled="!isEdit">
                         <template slot="prepend">排序编号</template>
                     </el-input>
                 </div>
                 <div class="group switch-group">
                     <div class="el-input-group__prepend left-label">唯一标识</div>
-                    <div class="el-input-group__append right-label"><el-switch v-model="item.guid"></el-switch></div>
+                    <div class="el-input-group__append right-label"><el-switch v-model="item.guid" :disabled="!isEdit"></el-switch></div>
                 </div>
                 <div class="group type-group">
                     <div class="el-input-group__prepend left-label">类型</div>
-                    <el-select v-model="item.type" slot="append" placeholder="请选择">
+                    <el-select v-model="item.type" slot="append" placeholder="请选择" :disabled="!isEdit">
                         <el-option label="IP" value="IP"></el-option>
                         <el-option label="Str" value="Str"></el-option>
                         <el-option label="Int" value="Int"></el-option>
@@ -31,17 +31,17 @@
                     </el-select>
                 </div>
                 <div class="group" v-if="item.type==='Choices'">
-                    <el-input placeholder="请输入内容" v-model="item.selectLists">
+                    <el-input placeholder="请输入内容" v-model="item.selectLists" :disabled="!isEdit">
                         <template slot="prepend">可选值</template>
                     </el-input>
                 </div>
                 <div class="group select-group" v-for="(selects, indexs) of item.rules" :key="indexs">
-                    <el-select v-model="selects.name" slot="append" placeholder="请选择">
+                    <el-select v-model="selects.name" slot="append" placeholder="请选择" :disabled="!isEdit">
                         <el-option :key="index" :label="s.label" :value="s.value" v-for="(s, index) of showRulesList(selects.name, item.rules)"
                         :disabled="disabled(s, item)"></el-option>
                     </el-select>
-                    <el-input v-if="selects.name!=='unique' && selects.name!=='not_null'" placeholder="请输入内容" v-model="selects.value" />
-                    <el-input v-else placeholder="请输入内容" v-model="selectsValue" readonly />
+                    <el-input v-if="selects.name!=='unique' && selects.name!=='not_null'" :disabled="!isEdit" placeholder="请输入内容" v-model="selects.value" />
+                    <el-input v-else placeholder="请输入内容" v-model="selectsValue" readonly :disabled="!isEdit" />
                     <!-- <div v-else class="switch-container"><el-switch disabled v-model="selectsValue"></el-switch></div> -->
                     <span class="el-icon-circle-close closed" v-if="isEdit" @click="listDelete(indexs, item.rules)"></span>
                 </div>

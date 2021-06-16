@@ -1,6 +1,6 @@
 <template>
 <div class='admin-header'>
-    <router-link :to="{name: 'serviceTree'}" class="logo"> <font size="5" color="orange"> Lightning ⚡️ </font> </router-link>
+    <router-link :to="{name: 'serviceTree'}" class="logo"> <font size="5" color="orange">Lightning</font> </router-link>
     <div class="nav">
         <el-menu :default-active="activeIndex" @select="selectMenu" class="el-menu" mode="horizontal">
             <template v-for="firstMenu in navMenu">

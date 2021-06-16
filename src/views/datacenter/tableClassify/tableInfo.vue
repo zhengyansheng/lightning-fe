@@ -1,4 +1,6 @@
 <template>
+<div>
+    <el-page-header @back="goBack" :content="'详情信息'" style="margin-bottom: 10px;"></el-page-header>
     <div class="data-center-table">
         <div class="classify-nav">
             <p :class="{'active': currentNav === 'basicInfo'}" @click="currentNav = 'basicInfo'">基本信息</p>
@@ -78,6 +80,7 @@
             </el-table>
         </div>
     </div>
+</div>
 </template>
 <script>
     import TableData from '@components/datacenter/TableData.vue'
@@ -98,6 +101,7 @@
         },
         created() {
             this.getEditCardInfo()
+            this.currentNav = 'basicInfo'
         },
         methods: {
             getEditCardInfo() {
@@ -106,6 +110,9 @@
                     this.cardInfo = res.data
                 })
             },
+            goBack() {
+                this.$router.push({name: 'tablemanage'})
+            }
         }
     }
 </script>

@@ -75,7 +75,6 @@
             for(let i in this.form) {
                 this.form[i] = this.editData[i]
             }
-            // this.form = Object.assign({}, this.editData)
         },
         methods: {
             closeDia() {

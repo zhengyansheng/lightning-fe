@@ -4,10 +4,15 @@
         :visible="isShow"
         width="400px"
         @close="closeDia">
-        <div class="table-group">
+        <el-form ref="form" :model="form" label-width="60px">
+            <el-form-item label="名称" prop="name" required>
+                <el-input v-model="form.name" size="small"></el-input>
+            </el-form-item>
+        </el-form>
+        <!-- <div class="table-group">
             <label for="">名称</label>
             <el-input v-model="name" placeholder="请输入内容"></el-input>
-        </div>
+        </div> -->
         <span slot="footer" class="dialog-footer">
             <el-button size="small" @click="closeDia">取 消</el-button>
             <el-button size="small" type="primary" @click="confirmSubmit">提 交</el-button>
@@ -31,10 +36,13 @@
         },
         data() {
             return {
-                name: '',
+                // name: '',
                 title: '',
                 isEdit: false,
-                pid: ''
+                pid: '',
+                form: {
+                    name: ''
+                }
             }
         },
         watch: {
@@ -49,11 +57,11 @@
             isEdit(newVal) {
                 if (newVal) {
                     this.title = '编辑分类'
-                    this.name = this.editData.name
+                    this.form.name = this.editData.name
                     this.pid = this.editData.id
                 } else {
                     this.title = '新增分类'
-                    this.name = ''
+                    this.form.name = ''
                     this.pid = ''
                 }
             }
@@ -63,12 +71,12 @@
         methods: {
             closeDia() {
                 this.pid = '';
-                this.name = '';
+                this.form.name = '';
                 this.$emit('update:isShow', false)
             },
             confirmSubmit() {
                 let params = {
-                    name: this.name
+                    name: this.form.name
                 }
                 if (this.isEdit) {
                     this.api.datacenter.editTableClassify(this.pid, params).then(res => {
