@@ -53,11 +53,12 @@
         <div class="classify-container" v-show="currentNav === 'change'">
             <el-timeline>
                 <el-timeline-item :timestamp="item.create_time" placement="top" v-for="(item, index) in changeData" :key="index">
+                    <div class="year">{{item.create_time}}</div>
                     <el-card>
                         <div class="card-infos">
-                            <p style="font-weight:500;"><label>名称：</label>{{item.title}}</p>
-                            <p style="margin:15px 0;"><label>变更详情：</label>{{item.detail}}</p>
-                            <p style="font-size:14px;"><label>操作人：</label>{{item.operator}}</p>
+                            <p style="font-weight:500;">{{item.title}}</p>
+                            <p style="margin:15px 0;">{{item.detail}}</p>
+                            <p style="font-size:14px;text-align:right;">{{item.operator}}</p>
                         </div>
                     </el-card>
                 </el-timeline-item>
@@ -199,16 +200,27 @@
     justify-content: space-between;
     align-items: center;
 }
-.card-infos {
-    &>p {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: flex-start;
-        &>label {
-            width: 120px;
-            flex-shrink: 0;
-        }
+.year {
+  position: absolute;
+  left: -150px;
+  top: 1px;
+}
+// .card-infos {
+//     &>p {
+//         display: flex;
+//         flex-direction: row;
+//         justify-content: flex-start;
+//         align-items: flex-start;
+//         &>label {
+//             width: 120px;
+//             flex-shrink: 0;
+//         }
+//     }
+// }
+/deep/ .el-timeline {
+    margin-left: 150px;
+    .el-timeline-item__timestamp {
+        display: none;
     }
 }
 </style>
