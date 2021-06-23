@@ -187,7 +187,7 @@
                     parent_asset_id: this.currentTableId,    // 数据的 id
                     child_asset_id: id     // 绑定页面数据的id 
                 }
-                this.api.datacenter.setBDRelation(params).then(res => {
+                this.api.assetscenter.setBDRelation(params).then(res => {
                     if (res.code === 0) {
                         this.$message.success('绑定成功');
                         this.dialogVisible = false;
