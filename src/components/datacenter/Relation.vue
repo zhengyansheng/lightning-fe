@@ -23,7 +23,7 @@
             </el-table-column>
         </el-table>
         <el-dialog
-            title="提示"
+            title="绑定"
             :visible.sync="dialogVisible"
             :append-to-body="true"
             width="80%">
@@ -47,13 +47,11 @@
                         <el-switch v-model="scope.row.record_log" disabled size="mini"></el-switch>
                     </template>
                 </el-table-column>
-                <!-- <el-table-column prop="is_forbid_bind" label="禁止关联"></el-table-column>
-                <el-table-column prop="is_foreign_key" label="多对多关联"></el-table-column> -->
                 <el-table-column label="禁止关联｜多对多关联｜操作" fixed="right" width="250" align="center">
                     <template slot-scope="scope">
                         <el-switch v-model="forbid" size="mini"></el-switch>
                         <el-switch v-model="foreignKey" style="margin:0 10px;" size="mini"></el-switch>
-                        <el-button type="primary" plain size="small" @click="editRelation(scope.row, scope.$index, tableData)">绑定</el-button>
+                        <el-button type="primary" plain size="small" @click="editRelation(scope.row)">绑定</el-button>
                     </template>
                 </el-table-column>
             </el-table>

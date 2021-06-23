@@ -3,7 +3,7 @@
         <div class="tablemanage-operate">
             <!-- <el-button type="primary" plain @click="addNewTable('')">新增表</el-button> -->
             <el-button type="primary" plain @click="addNewType('')">新增分类</el-button>
-            <el-input v-model="search" prefix-icon="el-icon-search" placeholder="请输入内容" style="width: 200px; margin-left:10px;" @keyup.enter="fetchTableClassifyTree"></el-input>
+            <el-input v-model="search" prefix-icon="el-icon-search" placeholder="请输入内容" style="width: 200px; margin-left:10px;" @keyup.enter.native="fetchTableClassifyTree"></el-input>
         </div>
         <div class="meta"></div>
         <div class="tablemanage-container">
@@ -79,14 +79,11 @@
             },
             addNewTable(pid) {
                 this.isShowAddTable = true
-                console.log(typeof pid);
                 if (typeof pid === 'number') {
-                    console.log('pid', pid);
                     this.tablePid = pid;
                 }
             },
             addNewType(data) {
-                console.log(222, data);
                 this.isShowAddType = true
                 if (Object.keys(data).length) this.editTypeData = Object.assign({}, data);
             },
@@ -128,7 +125,6 @@
                 }).catch(() => {});
             },
             checkDetails(data) {
-                console.log('11111');
                 this.$router.push({name: 'tableinfo', query: {pid: data}})
             }
         }
@@ -139,7 +135,6 @@
     border: 1px solid #ebebeb;
     border-radius: 3px;
     transition: .2s;
-    // box-shadow: 0 0 8px 0 rgba(232,237,250,60%), 0 2px 4px 0 rgba(232,237,250,50%);
     background-color: #fff;
     .tablemanage-operate {
         padding: 24px;

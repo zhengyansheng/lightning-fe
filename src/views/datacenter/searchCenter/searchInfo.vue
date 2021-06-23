@@ -1,0 +1,234 @@
+<template>
+<div>
+    <el-page-header @back="goBack" :content="'详情信息'" style="margin-bottom: 10px;"></el-page-header>
+    <div class="data-center-table">
+        <div class="classify-nav">
+            <p :class="{'active': currentNav === 'basicInfo'}" @click="currentNav = 'basicInfo'">基本信息</p>
+            <p :class="{'active': currentNav === 'MyRelation'}" @click="currentNav = 'MyRelation'">我关联的</p>
+            <p :class="{'active': currentNav === 'relationMe'}" @click="currentNav = 'relationMe'">关联我的</p>
+            <p :class="{'active': currentNav === 'change'}" @click="currentNav = 'change'">变更记录</p>
+        </div>
+        <div class="meta"></div>
+        <div class="classify-container" v-show="currentNav === 'basicInfo'">
+            <el-form ref="form" label-width="80px" style="width: 500px; margin: auto;">
+                <el-form-item :label="item.label+' : '" v-for="(item, index) in cardInfo" :key="index">
+                    <span>{{item.value}}</span>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div class="classify-container" v-show="currentNav === 'MyRelation'">
+            <div v-for="(items, index) in myRelationTableData" :key="index">
+                <div class="table-head">
+                    <span>{{items.table_name}}</span>
+                </div>
+                <el-table :data="items.tableList" border style="width: 100%">
+                    <el-table-column
+                        v-for="(item, i) in items.theadList"
+                        v-bind="item" :key="i" :label="item.label" :prop="item.props" >
+                        <template slot-scope="scope">
+                            <span>{{ scope.row[item.props] }}</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-divider v-if="index+1 !== myRelationTableData.length"></el-divider>
+            </div>
+        </div>
+        <div class="classify-container" v-show="currentNav === 'relationMe'">
+            <div v-for="(items, index) in relationMeTableData" :key="index">
+                <div class="table-head">
+                    <span>{{items.table_name}}</span>
+                </div>
+                <el-table :data="items.tableList" border style="width: 100%">
+                    <el-table-column
+                        v-for="(item, i) in items.theadList"
+                        v-bind="item" :key="i" :label="item.label" :prop="item.props" >
+                        <template slot-scope="scope">
+                            <span>{{ scope.row[item.props] }}</span>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-divider v-if="index+1 !== relationMeTableData.length"></el-divider>
+            </div>
+        </div>
+        <div class="classify-container" v-show="currentNav === 'change'">
+            <el-timeline>
+                <el-timeline-item :timestamp="item.create_time" placement="top" v-for="(item, index) in changeData" :key="index">
+                    <el-card>
+                        <div class="card-infos">
+                            <p style="font-weight:500;"><label>名称：</label>{{item.title}}</p>
+                            <p style="margin:15px 0;"><label>变更详情：</label>{{item.detail}}</p>
+                            <p style="font-size:14px;"><label>操作人：</label>{{item.operator}}</p>
+                        </div>
+                    </el-card>
+                </el-timeline-item>
+            </el-timeline>
+        </div>
+    </div>
+</div>
+</template>
+<script>
+    export default {
+        name: '',
+        data() {
+            return {
+                currentNav: 'basicInfo',
+                myRelationTableData: [],
+                relationMeTableData: [],
+                cardInfo: {},
+                currentPage: 1,
+                changeData: []
+            }
+        },
+        created() {
+            this.getDetails();
+            this.currentNav = 'basicInfo';
+            this.getChangeRecords();
+        },
+        methods: {
+            getDetails() {
+                if (!this.$route.query.id) return false;
+                this.api.assetscenter.fetchSearchDetail(this.$route.query.id).then(res => {
+                    this.cardInfo = this.formatBaiscInfo(res.data)
+                    this.myRelationTableData = this.formatTableData(res.data.children)
+                    this.relationMeTableData = this.formatTableData(res.data.relevant)
+                })
+            },
+            formatBaiscInfo(tableObj) {
+                let valueData = tableObj.data ? tableObj.data.data : {};
+                let fields = tableObj ? tableObj.fields : {};
+                let theadList = [];
+                for(let key in fields) {
+                    theadList.push({
+                        props: key,
+                        label: tableObj.fields[key]['name'],
+                        order: tableObj.fields[key]['order'],
+                        value: valueData[key]
+                    })
+                }
+                theadList.sort((a, b) => a.order - b.order)
+                return theadList;
+            },
+            formatTableData(children) {
+                if (!children) return false;
+                let allTableData = []
+                children.forEach(items => {
+                    let fields = items ? items.fields : {};
+                    let theadList = [];
+                    for(let key in fields) {
+                        theadList.push({
+                            props: key,
+                            label: items.fields[key]['name'],
+                            order: items.fields[key]['order'],
+                        })
+                    }
+                    theadList.sort((a, b) => a.order - b.order)
+
+                    let data = items ? items.data : [];
+                    let tableList = data.map(item => { 
+                        let obj = {...item, ...item.data}
+                        return obj
+                    })
+                    let tableObj = {
+                        theadList,
+                        tableList,
+                        table_name: items.table_name,
+                        table_id: items.table_id
+                    }
+                    allTableData.push(tableObj)
+                })
+                return allTableData
+            },
+            getChangeRecords() {
+                if (!this.$route.query.id) return false;
+                let params = {
+                    table_data: this.$route.query.id,
+                    page: this.currentPage
+                }
+                this.api.assetscenter.fetchRecordList(params).then(res => {
+                    console.log('resrecords', res.data.results);
+                    // if (res.data && res.data.results && res.data.results.length) {
+                        this.changeData = [
+                            {
+                                "id": 11,
+                                "create_time": "2021-05-27 22:59:39",
+                                "remark": null,
+                                "is_deleted": false,
+                                "title": "删除记录-物理网卡",
+                                "detail": "删除详情: {'up': 'up', 'name': 'eth121', 'hwaddr': '00:cc:o9:98:df', 'ipaddr': '192.168.1.121', 'gateway': '192.168.1.254', 'network': '255.255.255.0'}",
+                                "operator": "AnonymousUser",
+                                "table_data": 1
+                            }, {
+                                "id": 12,
+                                "create_time": "2021-05-28 22:59:39",
+                                "remark": null,
+                                "is_deleted": false,
+                                "title": "删除记录-物理网卡1111",
+                                "detail": "删除详情: {'up': 'up2222', 'name': 'eth121', 'hwaddr': '00:cc:o9:98:df', 'ipaddr': '192.168.1.121', 'gateway': '192.168.1.254', 'network': '255.255.255.0'}",
+                                "operator": "AnonymousUser3333",
+                                "table_data": 2
+                            }
+                        ]
+                    // } 
+                })
+            },
+            goBack() {
+                this.$router.push({name: 'sclist'})
+            }
+        }
+    }
+</script>
+<style lang="scss" scoped>
+.data-center-table {
+    border: 1px solid #ebebeb;
+    border-radius: 3px;
+    transition: .2s;
+    // box-shadow: 0 0 8px 0 rgba(232,237,250,60%), 0 2px 4px 0 rgba(232,237,250,50%);
+    background-color: #fff;
+    .classify-nav {
+        padding: 24px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        &>p {
+            display: inline-block;
+            cursor: pointer;
+        }
+        .active {
+            font-weight: 700;
+        }
+    }
+    .meta {
+        background-color: #fafafa;
+        border-top: 1px solid #eaeefb;
+        overflow: hidden;
+        height: 0;
+        transition: height .2s;
+    }
+    .classify-container {
+        padding: 24px;
+        box-sizing: border-box;
+    }
+}
+
+.table-head {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.card-infos {
+    &>p {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: flex-start;
+        &>label {
+            width: 120px;
+            flex-shrink: 0;
+        }
+    }
+}
+</style>

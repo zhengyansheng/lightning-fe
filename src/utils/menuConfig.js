@@ -114,6 +114,20 @@ const menuConfig = [{
             go() {
                 window.location.href = '/tableclassify'
             },
+        }, {
+            title: '资产中心',
+            index: '5-2',
+            routeName: 'assets',
+            go() {
+                window.location.href = '/assets'
+            },
+        }, {
+            title: '查询中心',
+            index: '5-3',
+            routeName: 'searchcenter',
+            go() {
+                window.location.href = '/searchcenter'
+            },
         }
     ]
 }

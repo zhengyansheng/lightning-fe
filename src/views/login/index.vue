@@ -15,7 +15,7 @@
       <el-checkbox v-model="checked">Remember me</el-checkbox>
       </el-form-item>
       <el-form-item>
-        <el-button class="login"  @click="submit" @keyup.enter="submit">Login</el-button>
+        <el-button class="login"  @click="submit" @keyup.enter.native="submit">Login</el-button>
       </el-form-item>
     </el-form>
    </div>
@@ -32,7 +32,7 @@ export default {
       loading: false,
       redirect: undefined,
       form: {
-        
+
       }
     };
   },

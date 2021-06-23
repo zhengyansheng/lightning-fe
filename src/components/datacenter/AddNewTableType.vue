@@ -4,18 +4,14 @@
         :visible="isShow"
         width="400px"
         @close="closeDia">
-        <el-form ref="form" :model="form" label-width="60px">
+        <el-form ref="form" :model="form" label-width="60px" :validate-on-rule-change="false">
             <el-form-item label="名称" prop="name" required>
                 <el-input v-model="form.name" size="small"></el-input>
             </el-form-item>
         </el-form>
-        <!-- <div class="table-group">
-            <label for="">名称</label>
-            <el-input v-model="name" placeholder="请输入内容"></el-input>
-        </div> -->
         <span slot="footer" class="dialog-footer">
             <el-button size="small" @click="closeDia">取 消</el-button>
-            <el-button size="small" type="primary" @click="confirmSubmit">提 交</el-button>
+            <el-button size="small" type="primary" :disabled="disabled" @click="confirmSubmit">提 交</el-button>
         </span>
     </el-dialog>
 </template>
@@ -36,13 +32,13 @@
         },
         data() {
             return {
-                // name: '',
                 title: '',
                 isEdit: false,
                 pid: '',
                 form: {
                     name: ''
-                }
+                },
+                disabled: false
             }
         },
         watch: {
@@ -75,6 +71,8 @@
                 this.$emit('update:isShow', false)
             },
             confirmSubmit() {
+                if (this.disabled) return false;
+                this.disabled = true;
                 let params = {
                     name: this.form.name
                 }
@@ -87,6 +85,8 @@
                         } else {
                             this.$message.error(res.message)
                         }
+                    }).finally(res => {
+                        this.disabled = false
                     })
                 } else {
                     this.api.datacenter.addNewTableClassify(params).then(res => {
@@ -97,6 +97,8 @@
                         } else {
                             this.$message.error(res.message)
                         }
+                    }).finally(res => {
+                        this.disabled = false
                     })
                 }
             }
