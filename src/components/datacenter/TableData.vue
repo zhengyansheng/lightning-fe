@@ -40,7 +40,8 @@
                         <el-option :key="index" :label="s.label" :value="s.value" v-for="(s, index) of showRulesList(selects.name, item.rules)"
                         :disabled="disabled(s, item)"></el-option>
                     </el-select>
-                    <el-input v-if="selects.name!=='unique' && selects.name!=='not_null'" :disabled="!isEdit" placeholder="请输入内容" v-model="selects.value" />
+                    <el-input v-if="selects.name=='lens'||selects.name=='max'||selects.name=='min'" v-model="selects.value" type="number" :min="0" :disabled="!isEdit" />
+                    <el-input v-else-if="selects.name!=='unique' && selects.name!=='not_null'" :disabled="!isEdit" placeholder="请输入内容" v-model="selects.value" />
                     <el-input v-else placeholder="请输入内容" v-model="selectsValue" readonly :disabled="!isEdit" />
                     <!-- <div v-else class="switch-container"><el-switch disabled v-model="selectsValue"></el-switch></div> -->
                     <span class="el-icon-circle-close closed" v-if="isEdit" @click="listDelete(indexs, item.rules)"></span>
@@ -266,6 +267,9 @@
                                 return this.$message.error('default字段的取值范围在可选值内')
                             }
                             obj[rule.name] = rule.value
+                        }
+                        else if (rule.name === 'lens' || rule.name === 'max' || rule.name === 'min') {
+                            obj[rule.name] = Number(rule.value)
                         }
                         else obj[rule.name] = rule.value
                         rulesObj[key] = Object.assign(obj, rulesObj[key])
