@@ -15,7 +15,7 @@
                 </el-table-column>
                 <el-table-column label="操作" fixed="right">
                     <template slot-scope="scope">
-                        <el-button plain type="danger" size="mini" @click="cancelBD(scope.row.id, scope.$index, items.tableList)">解绑</el-button>
+                        <el-button plain type="danger" size="mini" @click="cancelBD(scope.row, scope.$index, items.tableList)">解绑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -66,11 +66,17 @@
                 currentTableId: '',
             }
         },
+        watch: {
+            tableData(newVal) {
+                console.log('tableData', newVal);
+            }
+        },
         created() {
             this.fetchBDRelationList()
         },
         methods: {
             fetchBDRelationList() {
+                console.log('11111');
                 if (!this.parent_asset_id) return false;
                 this.api.assetscenter.fetchBDRelationList(this.parent_asset_id).then(res => {
                     console.log('res', res.data.children);
@@ -115,16 +121,18 @@
                         table_name: items.table_name,
                         table_id: items.table_id
                     }
+                    console.log('items', items);
                     allTableData.push(tableObj)
                 })
                 return allTableData
             },
             cancelBD(id, index, tableData) {
+                console.log('iddddd', id);
                 let params = {
                     parent_asset_id: this.parent_asset_id,    // 数据的 id
-                    child_asset_id: id     // 绑定页面数据的id 
+                    child_asset_id: id.id     // 绑定页面数据的id 
                 }
-                this.api.datacenter.cancelBDRelation(params).then(res => {
+                this.api.assetscenter.cancelBDRelation(params).then(res => {
                     if (res.code === 0) {
                         this.$message.success('解绑成功');
                         tableData.splice(index, 1);
@@ -134,6 +142,7 @@
                 })
             },
             openRelationDia(tableId) {
+                console.log('openRelationDia', tableId);
                 this.dialogVisible = true;
                 this.currentTableId = tableId;
                 this.searchData()
@@ -148,7 +157,7 @@
                     if (res.code === -1) {
                         this.$message.error(res.message)
                     } else {
-                        this.tableData = this.formatInnerTableData(res.results);
+                        this.innerTableData = this.formatInnerTableData(res.results);
                     }
                 })
             },
@@ -184,7 +193,7 @@
             },
             confirmSetRelationSubmit(id) {
                 let params = {
-                    parent_asset_id: this.currentTableId,    // 数据的 id
+                    parent_asset_id: this.parent_asset_id,    // 数据的 id
                     child_asset_id: id     // 绑定页面数据的id 
                 }
                 this.api.assetscenter.setBDRelation(params).then(res => {

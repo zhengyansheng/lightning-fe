@@ -170,6 +170,7 @@
                 }).catch(() => {});
             },
             editTableData(row) {
+                console.log('row', row);
                 this.showEditDia = true;
                 this.rowData = Object.assign({}, row)
             }

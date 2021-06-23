@@ -2,7 +2,7 @@
     <el-dialog
         title=""
         :visible="isShow"
-        width="600px"
+        width="80%"
         @close="closeDia">
         <el-tabs v-model="activeName" style="position: relative;top: -28px;">
             <el-tab-pane label="基本信息" name="base">
@@ -40,6 +40,7 @@
         },
         watch: {
             isShow(newVal) {
+                console.log('isShow', newVal);
                 if (newVal) {
                     let formData = this.fields.map(item => {
                         return {
