@@ -145,30 +145,10 @@
                     page: this.currentPage
                 }
                 this.api.assetscenter.fetchRecordList(params).then(res => {
-                    console.log('resrecords', res.data.results);
-                    // if (res.data && res.data.results && res.data.results.length) {
-                        this.changeData = [
-                            {
-                                "id": 11,
-                                "create_time": "2021-05-27 22:59:39",
-                                "remark": null,
-                                "is_deleted": false,
-                                "title": "删除记录-物理网卡",
-                                "detail": "删除详情: {'up': 'up', 'name': 'eth121', 'hwaddr': '00:cc:o9:98:df', 'ipaddr': '192.168.1.121', 'gateway': '192.168.1.254', 'network': '255.255.255.0'}",
-                                "operator": "AnonymousUser",
-                                "table_data": 1
-                            }, {
-                                "id": 12,
-                                "create_time": "2021-05-28 22:59:39",
-                                "remark": null,
-                                "is_deleted": false,
-                                "title": "删除记录-物理网卡1111",
-                                "detail": "删除详情: {'up': 'up2222', 'name': 'eth121', 'hwaddr': '00:cc:o9:98:df', 'ipaddr': '192.168.1.121', 'gateway': '192.168.1.254', 'network': '255.255.255.0'}",
-                                "operator": "AnonymousUser3333",
-                                "table_data": 2
-                            }
-                        ]
-                    // } 
+                    console.log('resrecords', res.data);
+                    if (res.data && res.data.results && res.data.results.length) {
+                        this.changeData = res.data.results
+                    } 
                 })
             },
             goBack() {
