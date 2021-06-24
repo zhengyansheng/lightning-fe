@@ -2,7 +2,7 @@
     <el-dialog
         title=""
         :visible="isShow"
-        width="80%"
+        :width="activeName==='base'?'400px':'80%'"
         @close="closeDia">
         <el-tabs v-model="activeName" style="position: relative;top: -28px;">
             <el-tab-pane label="基本信息" name="base">
@@ -14,7 +14,7 @@
                 </el-form>
             </el-tab-pane>
             <el-tab-pane label="关联中心" name="relation">
-                <RelationCenter :parent_asset_id="rowData.id" />
+                <RelationCenter :parent_asset_id="rowData.id" v-if="activeName==='relation'" />
             </el-tab-pane>
         </el-tabs>
         
@@ -40,6 +40,7 @@
         },
         watch: {
             isShow(newVal) {
+                this.activeName = 'base'
                 console.log('isShow', newVal);
                 if (newVal) {
                     let formData = this.fields.map(item => {
@@ -57,8 +58,8 @@
         },
         methods: {
             closeDia() {
-                this.formData = []
                 this.$emit('update:isShow', false)
+                this.formData = []
             },
             confirmSubmit() {
                 let obj = {}

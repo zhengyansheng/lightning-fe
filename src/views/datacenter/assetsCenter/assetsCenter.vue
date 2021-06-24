@@ -23,22 +23,26 @@
         </div>
         <div class="meta"></div>
         <div class="assets-center-container">
-            <el-table :data="tableList" border style="width: 100%" v-if="tableColumns.length">
-                <el-table-column type="index" width="50" label="序号"></el-table-column>
-                <el-table-column
-                    v-for="(item, index) in tableColumns"
-                    v-bind="item" :key="index" :label="item.label" :prop="item.props" >
-                    <template slot-scope="scope">
-                        <span>{{ scope.row[item.props] }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" fixed="right">
-                    <template slot-scope="scope">
-                        <el-button plain type="primary" size="mini" @click="editTableData(scope.row)">编辑</el-button>
-                        <el-button plain type="danger" size="mini" @click="deleteData(scope.row.id, scope.$index, tableList)">删除</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
+            <template v-if="tableColumns.length">
+                <el-table :data="tableList" border style="width: 100%">
+                    <el-table-column type="index" width="50" label="序号"></el-table-column>
+                    <el-table-column
+                        v-for="(item, index) in tableColumns"
+                        v-bind="item" :key="index" :label="item.label" :prop="item.props" >
+                        <template slot-scope="scope">
+                            <span>{{ scope.row[item.props] }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right">
+                        <template slot-scope="scope">
+                            <el-button plain type="primary" size="mini" @click="editTableData(scope.row)">编辑</el-button>
+                            <el-button plain type="danger" size="mini" @click="deleteData(scope.row.id, scope.$index, tableList)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </template>
+            <div v-else-if="noSelect" class="no-data">请选择主类型和子类型，来加载数据</div>
+            <div v-else class="no-data">暂无数据</div>
         </div>
         <AddTableData :isShow.sync="showAddTableData" :fields="tableColumns" :table_classify_id="formInline.table_classify_id" />
         <EditTableData :isShow.sync="showEditDia" :fields="tableColumns" :table_classify_id="formInline.table_classify_id" :rowData="rowData" />
@@ -67,7 +71,8 @@
                 secondList: [],
                 showAddTableData: false,
                 showEditDia: false,
-                rowData: {}
+                rowData: {},
+                noSelect: true
             }
         },
         created() {
@@ -101,6 +106,7 @@
                         this.tableObj = res.results;
                         this.formatTableData(this.tableObj)
                     }
+                    this.noSelect = false
                 })
             },
             // 获取table列表
@@ -114,6 +120,7 @@
                         this.tableObj = res.results;
                         this.formatTableData(this.tableObj)
                     }
+                    this.noSelect = false
                 })
             },
             formatTableData(tableObj) {
@@ -179,11 +186,9 @@
 </script>
 <style lang="scss" scoped>
 .assets-center-container {
-    // border: 1px solid #ebebeb;
     border-radius: 3px;
     transition: .2s;
     background-color: #fff;
-    min-height: 200px;
     .assets-center-operate {
         padding: 24px;
         box-sizing: border-box;

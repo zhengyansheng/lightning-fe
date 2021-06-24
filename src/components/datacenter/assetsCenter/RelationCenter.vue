@@ -1,7 +1,27 @@
 <template>
     <div class="container">
-        <div v-for="(items, index) in tableData" :key="index">
-            <div class="table-head">
+        <div class="card-tablelist" v-for="(items, index) in tableData" :key="index">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix" style="display:flex;align-items:center;justify-content:space-between;">
+                    <span>{{items.table_name}}</span>
+                    <el-button plain type="primary" size="mini" @click="openRelationDia(items.table_id)">绑定</el-button>
+                </div>
+                <el-table :data="items.tableList" border style="width: 100%">
+                    <el-table-column
+                        v-for="(item, i) in items.theadList"
+                        v-bind="item" :key="i" :label="item.label" :prop="item.props" >
+                        <template slot-scope="scope">
+                            <span>{{ scope.row[item.props] }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right">
+                        <template slot-scope="scope">
+                            <el-button plain type="danger" size="mini" @click="cancelBD(scope.row, scope.$index, items.tableList)">解绑</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-card>
+            <!-- <div class="table-head">
                 <span>{{items.table_name}}</span>
                 <el-button plain type="primary" size="mini" @click="openRelationDia(items.table_id)">绑定</el-button>
             </div>
@@ -19,7 +39,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-divider v-if="index+1 !== tableData.length"></el-divider>
+            <el-divider v-if="index+1 !== tableData.length"></el-divider> -->
         </div>
 
         <el-dialog
@@ -64,6 +84,7 @@
                 innerTableColumns: [],
                 innerTableData: [],
                 currentTableId: '',
+                currentPage: 1
             }
         },
         watch: {
@@ -150,14 +171,15 @@
             searchData() {
                 let params = {
                     table_classify_id: this.currentTableId,
-                    search: this.search
+                    search: this.search,
+                    page: this.currentPage
                 }
                 this.api.assetscenter.fetchNeedBDRelationList(params).then(res => {
                     console.log('res', res.results);
                     if (res.code === -1) {
                         this.$message.error(res.message)
                     } else {
-                        this.innerTableData = this.formatInnerTableData(res.results);
+                        this.formatInnerTableData(res.results);
                     }
                 })
             },
@@ -210,11 +232,21 @@
     }
 </script>
 <style lang="scss" scoped>
+.card-tablelist {
+    margin-bottom: 10px;
+    padding: 10px;
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
 .table-head {
     margin-bottom: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+}
+/deep/ .el-card__header {
+    background: rgb(217, 236, 255);
 }
 </style>
