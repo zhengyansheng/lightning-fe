@@ -89,10 +89,6 @@
             },
             // 查询按钮
             searchData() {
-                if (this.formInline.table_classify_id === '') {
-                    this.$message.error('请选择类型')
-                    return false;
-                }
                 let params = { table_classify_id: this.formInline.table_classify_id, search: this.formInline.search }
                 this.api.assetscenter.fetchSCList(params).then(res => {
                     if (res.code === -1) {

@@ -101,6 +101,10 @@
                 this.searchData()
             },
             searchData() {
+                if (this.formInline.table_classify_id === '') {
+                    this.$message.error('请选择类型')
+                    return false;
+                }
                 const params = {
                     table_classify_id: this.formInline.table_classify_id,
                     search: this.formInline.search,
