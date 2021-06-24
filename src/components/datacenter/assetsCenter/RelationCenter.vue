@@ -51,22 +51,24 @@
                 <el-input v-model="search" size="small" style="width: 180px;" @keyup.enter.native="searchData" />
                 <el-button plain type="primary" size="small" @click="searchData" style="margin-left: 10px;">查询</el-button>
             </div>
-
-            <el-table :data="innerTableData" border style="width: 100%" v-if="innerTableColumns.length">
-                <el-table-column
-                    v-for="(item, index) in innerTableColumns"
-                    v-bind="item" :key="index" :label="item.label" :prop="item.props" >
-                    <template slot-scope="scope">
-                        <span>{{ scope.row[item.props] }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" fixed="right">
-                    <template slot-scope="scope">
-                        <el-button plain type="primary" size="mini" @click="confirmSetRelationSubmit(scope.row.id)">绑定</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-
+            <tempalte v-if="innerTableColumns.length">
+                <el-table :data="innerTableData" border style="width: 100%">
+                    <el-table-column
+                        v-for="(item, index) in innerTableColumns"
+                        v-bind="item" :key="index" :label="item.label" :prop="item.props" >
+                        <template slot-scope="scope">
+                            <span>{{ scope.row[item.props] }}</span>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right">
+                        <template slot-scope="scope">
+                            <el-button plain type="primary" size="mini" @click="confirmSetRelationSubmit(scope.row.id)">绑定</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <el-pagination background layout="prev, pager, next" :total="total" @current-change="handleCurrentChange"></el-pagination>
+            </tempalte>
+            <div v-else class="no-data">暂无数据</div>
             <span slot="footer" class="dialog-footer"></span>
         </el-dialog>
     </div>
@@ -84,12 +86,8 @@
                 innerTableColumns: [],
                 innerTableData: [],
                 currentTableId: '',
-                currentPage: 1
-            }
-        },
-        watch: {
-            tableData(newVal) {
-                console.log('tableData', newVal);
+                currentPage: 1,
+                total: 0
             }
         },
         created() {
@@ -97,10 +95,8 @@
         },
         methods: {
             fetchBDRelationList() {
-                console.log('11111');
                 if (!this.parent_asset_id) return false;
                 this.api.assetscenter.fetchBDRelationList(this.parent_asset_id).then(res => {
-                    console.log('res', res.data.children);
                     if (res.code === 0) {
                         this.tableData = this.formatTableList(res.data.children);
                     } else {
@@ -142,13 +138,11 @@
                         table_name: items.table_name,
                         table_id: items.table_id
                     }
-                    console.log('items', items);
                     allTableData.push(tableObj)
                 })
                 return allTableData
             },
             cancelBD(id, index, tableData) {
-                console.log('iddddd', id);
                 let params = {
                     parent_asset_id: this.parent_asset_id,    // 数据的 id
                     child_asset_id: id.id     // 绑定页面数据的id 
@@ -163,9 +157,13 @@
                 })
             },
             openRelationDia(tableId) {
-                console.log('openRelationDia', tableId);
                 this.dialogVisible = true;
                 this.currentTableId = tableId;
+                this.currentPage = 1;
+                this.searchData()
+            },
+            handleCurrentChange(val) {
+                this.currentPage = val;
                 this.searchData()
             },
             searchData() {
@@ -175,11 +173,11 @@
                     page: this.currentPage
                 }
                 this.api.assetscenter.fetchNeedBDRelationList(params).then(res => {
-                    console.log('res', res.results);
                     if (res.code === -1) {
                         this.$message.error(res.message)
                     } else {
                         this.formatInnerTableData(res.results);
+                        this.total = res.count
                     }
                 })
             },
@@ -253,5 +251,9 @@
     /deep/ .el-table .cell, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
         text-align: center;
     }
+}
+/deep/ .el-pagination {
+    margin-top: 10px;
+    text-align: center;
 }
 </style>

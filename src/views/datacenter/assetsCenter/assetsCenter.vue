@@ -40,6 +40,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination background layout="prev, pager, next" :total="total" @current-change="handleCurrentChange"></el-pagination>
             </template>
             <div v-else-if="noSelect" class="no-data">请选择主类型和子类型，来加载数据</div>
             <div v-else class="no-data">暂无数据</div>
@@ -72,7 +73,9 @@
                 showAddTableData: false,
                 showEditDia: false,
                 rowData: {},
-                noSelect: true
+                noSelect: true,
+                total: 0,
+                currentPage: 1
             }
         },
         created() {
@@ -93,17 +96,26 @@
                     this.secondList = res.data.results
                 })
             },
+            handleCurrentChange(val) {
+                this.currentPage = val
+                this.searchData()
+            },
             searchData() {
                 if (this.formInline.table_classify_id === '') {
                     this.$message.error('请选择类型')
                     return false;
                 }
-                let params = { table_classify_id: this.formInline.table_classify_id, search: this.formInline.search }
+                let params = { 
+                    table_classify_id: this.formInline.table_classify_id, 
+                    search: this.formInline.search,
+                    page: this.currentPage 
+                }
                 this.api.assetscenter.fetchAssetsTableList(params).then(res => {
                     if (res.code === -1) {
                         this.$message.error(res.message)
                     } else {
                         this.tableObj = res.results;
+                        this.total = res.count;
                         this.formatTableData(this.tableObj)
                     }
                     this.noSelect = false
@@ -118,6 +130,7 @@
                         this.$message.error(res.message)
                     } else {
                         this.tableObj = res.results;
+                        this.total = res.count;
                         this.formatTableData(this.tableObj)
                     }
                     this.noSelect = false
@@ -210,6 +223,10 @@
     .assets-center-container {
         padding: 24px;
         box-sizing: border-box;
+    }
+    /deep/ .el-pagination {
+        margin-top: 10px;
+        text-align: center;
     }
 }
 </style>

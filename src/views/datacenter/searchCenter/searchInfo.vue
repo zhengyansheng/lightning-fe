@@ -69,6 +69,7 @@
                     </el-card>
                 </el-timeline-item>
             </el-timeline>
+            <el-pagination v-if="changeData.length" background layout="prev, pager, next" :total="total" @current-change="handleCurrentChange"></el-pagination>
         </div>
     </div>
 </div>
@@ -145,6 +146,10 @@
                 })
                 return allTableData
             },
+            handleCurrentChange(val) {
+                this.currentPage = val;
+                this.getChangeRecords()
+            },
             getChangeRecords() {
                 if (!this.$route.query.id) return false;
                 let params = {
@@ -152,9 +157,9 @@
                     page: this.currentPage
                 }
                 this.api.assetscenter.fetchRecordList(params).then(res => {
-                    console.log('resrecords', res.data);
                     if (res.data && res.data.results && res.data.results.length) {
-                        this.changeData = res.data.results
+                        this.changeData = res.data.results;
+                        this.total = res.data.count
                     } 
                 })
             },
@@ -169,6 +174,7 @@
             this.relationMeTableData = []
             this.currentPage = 1
             this.cardInfo = {}
+            this.total = 0
         },
     }
 </script>
@@ -236,5 +242,9 @@
     .el-timeline-item__timestamp {
         display: none;
     }
+}
+/deep/ .el-pagination {
+    margin-top: 10px;
+    text-align: center;
 }
 </style>
