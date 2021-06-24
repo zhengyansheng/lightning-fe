@@ -23,24 +23,29 @@
         <div class="meta"></div>
         <div class="assets-center-container">
             <template v-if="tableList.length">
-                <div v-for="(items, index) in tableList" :key="index">
-                    <p style="margin-bottom:10px; font-size:14px;">{{items.name}}</p>
-                    <el-table :data="items.tableList" border style="width: 100%">
-                        <el-table-column type="index" width="50" label="序号"></el-table-column>
-                        <el-table-column
-                            v-for="(item, index) in items.theadList"
-                            v-bind="item" :key="index" :label="item.label" :prop="item.props" >
-                            <template slot-scope="scope">
-                                <span>{{ scope.row[item.props] }}</span>
-                            </template>
-                        </el-table-column>
-                        <el-table-column label="操作" fixed="right">
-                            <template slot-scope="scope">
-                                <el-button plain type="primary" size="mini" @click="checkDetailInfo(scope.row)">详情</el-button>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                    <el-divider v-if="index+1 !== tableList.length"></el-divider>
+                <div v-for="(items, index) in tableList" :key="index" style="margin-bottom: 20px;">
+                    <el-card>
+                        <div slot="header" class="clearfix" style="display:flex;align-items:center;justify-content:space-between;">
+                            <span>{{items.name}}</span>
+                        </div>
+                        <!-- <p style="margin-bottom:10px; font-size:14px;">{{items.name}}</p> -->
+                        <el-table :data="items.tableList" border style="width: 100%">
+                            <el-table-column type="index" width="50" label="序号"></el-table-column>
+                            <el-table-column
+                                v-for="(item, index) in items.theadList"
+                                v-bind="item" :key="index" :label="item.label" :prop="item.props" >
+                                <template slot-scope="scope">
+                                    <span>{{ scope.row[item.props] }}</span>
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="操作" fixed="right">
+                                <template slot-scope="scope">
+                                    <el-button plain type="primary" size="mini" @click="checkDetailInfo(scope.row)">详情</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </el-card>
+                    <!-- <el-divider v-if="index+1 !== tableList.length"></el-divider> -->
                 </div>
             </template>
             <div v-else-if="noSelect" class="no-data">请选择主类型和子类型，来加载数据</div>
