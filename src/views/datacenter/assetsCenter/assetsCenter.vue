@@ -91,7 +91,7 @@
             // 获取子列表
             getSecondList(val) {
                 this.formInline.table_classify_id = '';
-                let params = {pid: val}
+                const params = { pid: val }
                 this.api.assetscenter.fetchAssetsSecondList(params).then(res => {
                     this.secondList = res.data.results
                 })
@@ -101,14 +101,10 @@
                 this.searchData()
             },
             searchData() {
-                if (this.formInline.table_classify_id === '') {
-                    this.$message.error('请选择类型')
-                    return false;
-                }
-                let params = { 
-                    table_classify_id: this.formInline.table_classify_id, 
+                const params = {
+                    table_classify_id: this.formInline.table_classify_id,
                     search: this.formInline.search,
-                    page: this.currentPage 
+                    page: this.currentPage
                 }
                 this.api.assetscenter.fetchAssetsTableList(params).then(res => {
                     if (res.code === -1) {
@@ -124,7 +120,7 @@
             // 获取table列表
             getTabeList(val) {
                 if (!val) return false;
-                let params = {table_classify_id: val}
+                const params = { table_classify_id: val }
                 this.api.assetscenter.fetchAssetsTableList(params).then(res => {
                     if (res.code === -1) {
                         this.$message.error(res.message)
@@ -137,22 +133,22 @@
                 })
             },
             formatTableData(tableObj) {
-                let fields = tableObj ? tableObj.fields : {};
+                const fields = tableObj ? tableObj.fields : {};
                 let theadList = [];
-                for(let key in fields) {
+                for (const key in fields) {
                     theadList.push({
                         props: key,
                         label: tableObj.fields[key]['name'],
-                        order: tableObj.fields[key]['order'],
+                        order: tableObj.fields[key]['order']
                     })
                 }
                 theadList.sort((a, b) => a.order - b.order)
                 // 规则校验
-                let rules = tableObj ? tableObj.rules : {};
-                for(let key in rules) {
+                const rules = tableObj ? tableObj.rules : {};
+                for (const key in rules) {
                     theadList = theadList.map(item => {
                         if (item.props === key) {
-                            item = {...item, ...rules[key]}
+                            item = { ...item, ...rules[key] }
                         }
                         return item
                     })
@@ -160,9 +156,9 @@
 
                 this.tableColumns = theadList;
 
-                let data = tableObj ? tableObj.data : [];
-                this.tableList = data.map(item => { 
-                    let obj = {...item, ...item.data}
+                const data = tableObj ? tableObj.data : [];
+                this.tableList = data.map(item => {
+                    const obj = { ...item, ...item.data }
                     return obj
                 })
             },
