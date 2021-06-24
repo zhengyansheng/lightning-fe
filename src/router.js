@@ -1,6 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+const originalReplace = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalReplace.call(this, location).catch(err => err)
+}
+
 Vue.use(Router);
 
 const routerConfig = {

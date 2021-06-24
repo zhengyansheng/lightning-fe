@@ -17,38 +17,44 @@
             </el-form>
         </div>
         <div class="classify-container" v-show="currentNav === 'MyRelation'">
-            <div v-for="(items, index) in myRelationTableData" :key="index">
-                <div class="table-head">
-                    <span>{{items.table_name}}</span>
+            <template v-if="myRelationTableData">
+                <div v-for="(items, index) in myRelationTableData" :key="index">
+                    <div class="table-head">
+                        <span>{{items.table_name}}</span>
+                    </div>
+                    <el-table :data="items.tableList" border style="width: 100%">
+                        <el-table-column
+                            v-for="(item, i) in items.theadList"
+                            v-bind="item" :key="i" :label="item.label" :prop="item.props" >
+                            <template slot-scope="scope">
+                                <span>{{ scope.row[item.props] }}</span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-divider v-if="index+1 !== myRelationTableData.length"></el-divider>
                 </div>
-                <el-table :data="items.tableList" border style="width: 100%">
-                    <el-table-column
-                        v-for="(item, i) in items.theadList"
-                        v-bind="item" :key="i" :label="item.label" :prop="item.props" >
-                        <template slot-scope="scope">
-                            <span>{{ scope.row[item.props] }}</span>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-divider v-if="index+1 !== myRelationTableData.length"></el-divider>
-            </div>
+            </template>
+            <div v-else class="no-data">暂无数据</div>
         </div>
         <div class="classify-container" v-show="currentNav === 'relationMe'">
-            <div v-for="(items, index) in relationMeTableData" :key="index">
-                <div class="table-head">
-                    <span>{{items.table_name}}</span>
+            <template v-if="relationMeTableData">
+                <div v-for="(items, index) in relationMeTableData" :key="index">
+                    <div class="table-head">
+                        <span>{{items.table_name}}</span>
+                    </div>
+                    <el-table :data="items.tableList" border style="width: 100%">
+                        <el-table-column
+                            v-for="(item, i) in items.theadList"
+                            v-bind="item" :key="i" :label="item.label" :prop="item.props" >
+                            <template slot-scope="scope">
+                                <span>{{ scope.row[item.props] }}</span>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                    <el-divider v-if="index+1 !== relationMeTableData.length"></el-divider>
                 </div>
-                <el-table :data="items.tableList" border style="width: 100%">
-                    <el-table-column
-                        v-for="(item, i) in items.theadList"
-                        v-bind="item" :key="i" :label="item.label" :prop="item.props" >
-                        <template slot-scope="scope">
-                            <span>{{ scope.row[item.props] }}</span>
-                        </template>
-                    </el-table-column>
-                </el-table>
-                <el-divider v-if="index+1 !== relationMeTableData.length"></el-divider>
-            </div>
+            </template>
+            <div v-else class="no-data">暂无数据</div>
         </div>
         <div class="classify-container" v-show="currentNav === 'change'">
             <el-timeline>
@@ -56,9 +62,9 @@
                     <div class="year">{{item.create_time}}</div>
                     <el-card>
                         <div class="card-infos">
-                            <p style="font-weight:500;">{{item.title}}</p>
-                            <p style="margin:15px 0;">{{item.detail}}</p>
-                            <p style="font-size:14px;text-align:right;">{{item.operator}}</p>
+                            <p style="font-weight:bold;font-size:16px;">{{item.title}}</p>
+                            <p style="margin:15px 0;text-indent: 34px;line-height: 20px;">{{item.detail}}</p>
+                            <p style="font-size:14px;text-align:right;font-weight:bold;">{{item.operator}}</p>
                         </div>
                     </el-card>
                 </el-timeline-item>
@@ -155,7 +161,15 @@
             goBack() {
                 this.$router.push({name: 'sclist'})
             }
-        }
+        },
+        beforeDestroy() {
+            this.currentNav = 'basicInfo';
+            this.changeData = []
+            this.myRelationTableData = []
+            this.relationMeTableData = []
+            this.currentPage = 1
+            this.cardInfo = {}
+        },
     }
 </script>
 <style lang="scss" scoped>
