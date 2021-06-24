@@ -249,4 +249,9 @@
 /deep/ .el-card__header {
     background: rgb(217, 236, 255);
 }
+.card-tablelist {
+    /deep/ .el-table .cell, .el-table--border td:first-child .cell, .el-table--border th:first-child .cell {
+        text-align: center;
+    }
+}
 </style>
