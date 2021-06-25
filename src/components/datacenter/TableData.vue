@@ -23,18 +23,18 @@
                 </div>
                 <div class="group type-group">
                     <div class="el-input-group__prepend left-label">类型</div>
-                    <el-select v-model="item.type" slot="append" placeholder="请选择" :disabled="!isEdit">
+                    <el-select v-model="item.type" slot="append" placeholder="请选择" :disabled="!isEdit" @change="changeType(item.type, item.rules)">
                         <el-option label="IP" value="IP"></el-option>
                         <el-option label="Str" value="Str"></el-option>
                         <el-option label="Int" value="Int"></el-option>
                         <el-option label="Choices" value="Choices"></el-option>
                     </el-select>
                 </div>
-                <div class="group" v-if="item.type==='Choices'">
+                <!-- <div class="group" v-if="item.type==='Choices'">
                     <el-input placeholder="请输入内容" v-model="item.select_list" :disabled="!isEdit">
                         <template slot="prepend">可选值</template>
                     </el-input>
-                </div>
+                </div> -->
                 <div class="group select-group" v-for="(selects, indexs) of item.rules" :key="indexs">
                     <el-select v-model="selects.name" slot="append" placeholder="请选择" :disabled="!isEdit">
                         <el-option :key="index" :label="s.label" :value="s.value" v-for="(s, index) of showRulesList(selects.name, item.rules)"
@@ -160,6 +160,14 @@
             this.displayLists = JSON.parse(JSON.stringify(this.initList()))
         },
         methods: {
+            changeType(val, selectList) {
+                console.log('val, selectList', val, selectList);
+                if (val === 'Choices') {
+                    selectList.push({
+                        name: 'select_list'
+                    });
+                }
+            },
             handleChange() {
                 this.$forceUpdate()
             },
