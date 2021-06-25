@@ -40,7 +40,7 @@
                         <el-option :key="index" :label="s.label" :value="s.value" v-for="(s, index) of showRulesList(selects.name, item.rules)"
                         :disabled="disabled(s, item)"></el-option>
                     </el-select>
-                    <el-input v-if="selects.name=='lens'||selects.name=='max'||selects.name=='min'" v-model="selects.value" type="number" :min="0" :disabled="!isEdit" />
+                    <el-input v-if="selects.name=='lens'||selects.name=='max'||selects.name=='min'" v-model.number="selects.value" type="number" :min="0" :disabled="!isEdit" />
                     <el-input v-else-if="selects.name!=='unique' && selects.name!=='not_null'" :disabled="!isEdit" placeholder="请输入内容" v-model="selects.value" />
                     <el-input v-else placeholder="请输入内容" v-model="selectsValue" readonly :disabled="!isEdit" />
                     <!-- <div v-else class="switch-container"><el-switch disabled v-model="selectsValue"></el-switch></div> -->
@@ -190,7 +190,7 @@
                                 if (r === 'select_list') {
                                     oneData['rules'].push({
                                         name: 'selectLists',
-                                        value: rules[key][r].join('')
+                                        value: rules[key][r].join(',')
                                     })
                                 } else if (r === 'unique' || r === 'not_null') {
                                     oneData['rules'].push({

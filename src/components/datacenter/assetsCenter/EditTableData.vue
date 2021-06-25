@@ -9,7 +9,16 @@
                 <el-form ref="form" label-width="100px" style="max-height: 400px;overflow: auto;">
                     <el-form-item v-for="(item, index) in formData" :key="index" style="margin-bottom: 8px;">
                         <span slot="label">{{item.label}}</span>
-                        <el-input v-model="item.value"></el-input>
+                        <el-input v-if="item.type==='Int'" v-model.number="item.value" type="number" :required="item.not_null || false"></el-input>
+                        <el-select v-else-if="item.type==='Choices'" v-model="item.value" placeholder="请选择" style="width: 100%;" :required="item.not_null || false">
+                            <el-option
+                                v-for="val in item.select_list"
+                                :key="val"
+                                :label="val"
+                                :value="val">
+                            </el-option>
+                        </el-select>
+                        <el-input v-else v-model="item.value" :maxlength="Number(item.lens) || ''" :required="item.not_null || false"></el-input>
                     </el-form-item>
                 </el-form>
             </el-tab-pane>
@@ -44,13 +53,10 @@
                 console.log('isShow', newVal);
                 if (newVal) {
                     let formData = this.fields.map(item => {
-                        return {
-                            props: item.props,
-                            label: item.label,
-                            value: this.rowData[item.props] || ''
-                        }
+                        item['value'] = this.rowData[item.props] || ''
+                        return item
                     })
-                    this.formData = formData
+                    this.formData = JSON.parse(JSON.stringify(formData));
                 }
             }
         },

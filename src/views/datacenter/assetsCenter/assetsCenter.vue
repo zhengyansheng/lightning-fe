@@ -157,7 +157,7 @@
                         return item
                     })
                 }
-
+                console.log('theadList', theadList);
                 this.tableColumns = theadList;
 
                 const data = tableObj ? tableObj.data : [];
