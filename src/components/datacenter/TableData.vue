@@ -111,6 +111,9 @@
                     }, {
                         label: 'min',
                         value: 'min'
+                    }, {
+                        label: 'select_list',
+                        value: 'select_list'
                     }
                 ],
                 displayLists: {
