@@ -25,7 +25,7 @@
         <div class="assets-center-container">
             <template v-if="tableColumns.length">
                 <el-table :data="tableList" border style="width: 100%;">
-                    <el-table-column type="index" width="50" label="序号"></el-table-column>
+                    <el-table-column type="index" width="50" label="序号" fixed></el-table-column>
                     <el-table-column
                         v-for="(item, index) in tableColumns"
                         v-bind="item" :key="index" :label="item.label" :prop="item.props" >

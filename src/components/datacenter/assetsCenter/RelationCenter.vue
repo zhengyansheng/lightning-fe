@@ -7,7 +7,7 @@
                     <el-button plain type="primary" size="mini" @click="openRelationDia(items.table_id)">绑定</el-button>
                 </div>
                 <el-table :data="items.tableList" border style="width: 100%">
-                    <el-table-column type="index" width="50" label="序号"></el-table-column>
+                    <el-table-column type="index" width="50" label="序号" fixed></el-table-column>
                     <el-table-column
                         v-for="(item, i) in items.theadList"
                         v-bind="item" :key="i" :label="item.label" :prop="item.props" >
@@ -22,25 +22,6 @@
                     </el-table-column>
                 </el-table>
             </el-card>
-            <!-- <div class="table-head">
-                <span>{{items.table_name}}</span>
-                <el-button plain type="primary" size="mini" @click="openRelationDia(items.table_id)">绑定</el-button>
-            </div>
-            <el-table :data="items.tableList" border style="width: 100%">
-                <el-table-column
-                    v-for="(item, i) in items.theadList"
-                    v-bind="item" :key="i" :label="item.label" :prop="item.props" >
-                    <template slot-scope="scope">
-                        <span>{{ scope.row[item.props] }}</span>
-                    </template>
-                </el-table-column>
-                <el-table-column label="操作" fixed="right">
-                    <template slot-scope="scope">
-                        <el-button plain type="danger" size="mini" @click="cancelBD(scope.row, scope.$index, items.tableList)">解绑</el-button>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <el-divider v-if="index+1 !== tableData.length"></el-divider> -->
         </div>
 
         <el-dialog
@@ -54,7 +35,7 @@
             </div>
             <tempalte v-if="innerTableColumns.length">
                 <el-table :data="innerTableData" border style="width: 100%">
-                    <el-table-column type="index" width="50" label="序号"></el-table-column>
+                    <el-table-column type="index" width="50" label="序号" fixed></el-table-column>
                     <el-table-column
                         v-for="(item, index) in innerTableColumns"
                         v-bind="item" :key="index" :label="item.label" :prop="item.props" >

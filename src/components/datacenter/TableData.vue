@@ -262,9 +262,9 @@
                     let rulesObj = {}
                     rulesObj[key] = { type: item.type }
                     if (item.type === 'Choices') {
-                        console.log('this.displayLists', item, item.select_list);
+                        console.log(1231231231312, item, typeof item.select_list);
                         rulesObj[key] = Object.assign(rulesObj[key], {
-                            select_list: item.select_list.split(',')
+                            select_list: typeof item.select_list==='object' ? item.select_list:item.select_list.split(',')
                         })
                     }
                     console.log('33333', rulesObj);
@@ -273,7 +273,8 @@
                         console.log('9999999', rule);
                         if (rule.name === 'unique' || rule.name === 'not_null') obj[rule.name] = true
                         else if (item.type === 'Choices' && rule.name === 'default') {
-                            if (item.select_list.split(',').indexOf(rule.value) < 0) {
+                            console.log(33333333, item.select_list, item.select_list.indexOf(rule.value) < 0);
+                            if ((typeof item.select_list==='object' && item.select_list.indexOf(rule.value) < 0) || (typeof item.select_list!=='object'&&item.select_list.split(',').indexOf(rule.value) < 0)) {
                                 choiceIsError = true
                                 return this.$message.error('default字段的取值范围在可选值内')
                             }

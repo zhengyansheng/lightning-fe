@@ -28,9 +28,8 @@
                         <div slot="header" class="clearfix" style="display:flex;align-items:center;justify-content:space-between;">
                             <span style="font-weight:bold;font-size:16px;color: #303133;">{{items.name}}</span>
                         </div>
-                        <!-- <p style="margin-bottom:10px; font-size:14px;">{{items.name}}</p> -->
                         <el-table :data="items.tableList" border style="width: 100%">
-                            <el-table-column type="index" width="50" label="序号"></el-table-column>
+                            <el-table-column type="index" width="50" label="序号" fixed></el-table-column>
                             <el-table-column
                                 v-for="(item, index) in items.theadList"
                                 v-bind="item" :key="index" :label="item.label" :prop="item.props" >
@@ -45,7 +44,6 @@
                             </el-table-column>
                         </el-table>
                     </el-card>
-                    <!-- <el-divider v-if="index+1 !== tableList.length"></el-divider> -->
                 </div>
             </template>
             <div v-else-if="noSelect" class="no-data">请选择主类型和子类型，来加载数据</div>
