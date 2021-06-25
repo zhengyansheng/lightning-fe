@@ -7,6 +7,7 @@
                     <el-button plain type="primary" size="mini" @click="openRelationDia(items.table_id)">绑定</el-button>
                 </div>
                 <el-table :data="items.tableList" border style="width: 100%">
+                    <el-table-column type="index" width="50" label="序号"></el-table-column>
                     <el-table-column
                         v-for="(item, i) in items.theadList"
                         v-bind="item" :key="i" :label="item.label" :prop="item.props" >
@@ -53,6 +54,7 @@
             </div>
             <tempalte v-if="innerTableColumns.length">
                 <el-table :data="innerTableData" border style="width: 100%">
+                    <el-table-column type="index" width="50" label="序号"></el-table-column>
                     <el-table-column
                         v-for="(item, index) in innerTableColumns"
                         v-bind="item" :key="index" :label="item.label" :prop="item.props" >
