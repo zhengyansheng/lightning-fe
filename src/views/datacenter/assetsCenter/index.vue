@@ -40,5 +40,8 @@
 /deep/ .el-table--border th, .el-table__fixed-right-patch {
     border-bottom: 1px solid #DCDFE6 !important;
 }
+/deep/ .el-card__header {
+    background: rgb(217, 236, 255);
+}
 
 </style>
