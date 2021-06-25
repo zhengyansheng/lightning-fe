@@ -33,7 +33,7 @@
                             <span>{{ scope.row[item.props] }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="操作" fixed="right">
+                    <el-table-column label="操作" fixed="right" width="160">
                         <template slot-scope="scope">
                             <el-button plain type="primary" size="mini" @click="editTableData(scope.row)">编辑</el-button>
                             <el-button plain type="danger" size="mini" @click="deleteData(scope.row.id, scope.$index, tableList)">删除</el-button>

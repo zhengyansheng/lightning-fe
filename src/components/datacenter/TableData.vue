@@ -31,7 +31,7 @@
                     </el-select>
                 </div>
                 <div class="group" v-if="item.type==='Choices'">
-                    <el-input placeholder="请输入内容" v-model="item.selectLists" :disabled="!isEdit">
+                    <el-input placeholder="请输入内容" v-model="item.select_list" :disabled="!isEdit">
                         <template slot="prepend">可选值</template>
                     </el-input>
                 </div>
@@ -192,7 +192,7 @@
                             if (r !== 'type') {
                                 if (r === 'select_list') {
                                     oneData['rules'].push({
-                                        name: 'selectLists',
+                                        name: 'select_list',
                                         value: rules[key][r].join(',')
                                     })
                                 } else if (r === 'unique' || r === 'not_null') {
@@ -254,9 +254,9 @@
                     let rulesObj = {}
                     rulesObj[key] = { type: item.type }
                     if (item.type === 'Choices') {
-                        console.log('this.displayLists', item, item.selectLists);
+                        console.log('this.displayLists', item, item.select_list);
                         rulesObj[key] = Object.assign(rulesObj[key], {
-                            select_list: item.selectLists.split(',')
+                            select_list: item.select_list.split(',')
                         })
                     }
                     console.log('33333', rulesObj);
@@ -265,7 +265,7 @@
                         console.log('9999999', rule);
                         if (rule.name === 'unique' || rule.name === 'not_null') obj[rule.name] = true
                         else if (item.type === 'Choices' && rule.name === 'default') {
-                            if (item.selectLists.split(',').indexOf(rule.value) < 0) {
+                            if (item.select_list.split(',').indexOf(rule.value) < 0) {
                                 choiceIsError = true
                                 return this.$message.error('default字段的取值范围在可选值内')
                             }
