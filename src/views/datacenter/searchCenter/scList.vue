@@ -3,11 +3,11 @@
         <div class="assets-center-operate">
             <el-form :inline="true" :model="formInline" class="demo-form-inline" size="small">
                 <el-form-item label="主类型">
-                    <el-select v-model="formInline.pid" @change="getSecondList">
+                    <el-select v-model="formInline.pid" @change="getSecondList" clearable>
                         <el-option v-for="item in mainList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item label="子类型">
+                <el-form-item label="子类型" clearable>
                     <el-select v-model="formInline.table_classify_id" @change="getTabeList">
                         <el-option v-for="item in secondList" :key="item.id" :label="item.name" :value="item.id"></el-option>
                     </el-select>
@@ -26,7 +26,7 @@
                 <div v-for="(items, index) in tableList" :key="index" style="margin-bottom: 20px;">
                     <el-card>
                         <div slot="header" class="clearfix" style="display:flex;align-items:center;justify-content:space-between;">
-                            <span>{{items.name}}</span>
+                            <span style="font-weight:bold;font-size:16px;color: #303133;">{{items.name}}</span>
                         </div>
                         <!-- <p style="margin-bottom:10px; font-size:14px;">{{items.name}}</p> -->
                         <el-table :data="items.tableList" border style="width: 100%">

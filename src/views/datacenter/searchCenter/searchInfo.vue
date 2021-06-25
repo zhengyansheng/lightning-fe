@@ -21,7 +21,7 @@
                 <div v-for="(items, index) in myRelationTableData" :key="index" style="margin-bottom: 20px;">
                     <el-card>
                         <div slot="header" class="clearfix" style="display:flex;align-items:center;justify-content:space-between;">
-                            <span>{{items.table_name}}</span>
+                            <span  style="font-weight:bold;font-size:16px;color: #303133;">{{items.table_name}}</span>
                         </div>
                     <!-- <div class="table-head">
                         <span>{{items.table_name}}</span>
@@ -46,7 +46,7 @@
                 <div v-for="(items, index) in relationMeTableData" :key="index" style="margin-bottom: 20px;">
                     <el-card>
                         <div slot="header" class="clearfix" style="display:flex;align-items:center;justify-content:space-between;">
-                            <span>{{items.table_name}}</span>
+                            <span  style="font-weight:bold;font-size:16px;color: #303133;">{{items.table_name}}</span>
                         </div>
                         <!-- <div class="table-head">
                             <span>{{items.table_name}}</span>
