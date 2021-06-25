@@ -23,10 +23,8 @@
                         <div slot="header" class="clearfix" style="display:flex;align-items:center;justify-content:space-between;">
                             <span  style="font-weight:bold;font-size:16px;color: #303133;">{{items.table_name}}</span>
                         </div>
-                    <!-- <div class="table-head">
-                        <span>{{items.table_name}}</span>
-                    </div> -->
                         <el-table :data="items.tableList" border style="width: 100%">
+                            <el-table-column type="index" width="50" label="序号"></el-table-column>
                             <el-table-column
                                 v-for="(item, i) in items.theadList"
                                 v-bind="item" :key="i" :label="item.label" :prop="item.props" >
@@ -35,7 +33,6 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                    <!-- <el-divider v-if="index+1 !== myRelationTableData.length"></el-divider> -->
                     </el-card>
                 </div>
             </template>
@@ -48,10 +45,8 @@
                         <div slot="header" class="clearfix" style="display:flex;align-items:center;justify-content:space-between;">
                             <span  style="font-weight:bold;font-size:16px;color: #303133;">{{items.table_name}}</span>
                         </div>
-                        <!-- <div class="table-head">
-                            <span>{{items.table_name}}</span>
-                        </div> -->
                         <el-table :data="items.tableList" border style="width: 100%">
+                            <el-table-column type="index" width="50" label="序号"></el-table-column>
                             <el-table-column
                                 v-for="(item, i) in items.theadList"
                                 v-bind="item" :key="i" :label="item.label" :prop="item.props" >
@@ -60,7 +55,6 @@
                                 </template>
                             </el-table-column>
                         </el-table>
-                        <!-- <el-divider v-if="index+1 !== relationMeTableData.length"></el-divider> -->
                     </el-card>
                 </div>
             </template>
