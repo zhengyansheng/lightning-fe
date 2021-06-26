@@ -1,9 +1,8 @@
 <template>
     <div class="data-center-tablemanage">
         <div class="tablemanage-operate">
-            <!-- <el-button type="primary" plain @click="addNewTable('')">新增表</el-button> -->
-            <el-button type="primary" plain @click="addNewType('')">新增分类</el-button>
             <el-input v-model="search" prefix-icon="el-icon-search" placeholder="请输入内容" style="width: 200px; margin-left:10px;" @keyup.enter.native="fetchTableClassifyTree"></el-input>
+            <el-button type="primary" plain @click="addNewType('')">新增分类</el-button>
         </div>
         <div class="meta"></div>
         <div class="tablemanage-container">
@@ -141,7 +140,7 @@
         box-sizing: border-box;
         display: flex;
         flex-direction: row;
-        justify-content: flex-start;
+        justify-content: space-between;
         align-items: center;
     }
     .meta {

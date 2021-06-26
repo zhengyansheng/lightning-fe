@@ -252,11 +252,13 @@
                 let guidIndex = 0
                 let choiceIsError = false
                 this.displayLists.forEach(item => {
-                    let key = item.name
+                    console.log('item.name', item.name);
+                    console.log('item.alias', item.alias);
+                    let key = item.name.trim()
                     let fieldsObj = {}
                     fieldsObj[key] = {
                         guid: item.guid,
-                        name: item.alias,
+                        name: item.alias.trim(),
                         order: Number(item.order),
                     }
                     let rulesObj = {}
@@ -270,7 +272,7 @@
                     console.log('33333', rulesObj);
                     item.rules.forEach(rule => {
                         let obj = {}
-                        console.log('9999999', rule);
+                        console.log('rule.value', rule.value);
                         if (rule.name === 'unique' || rule.name === 'not_null') obj[rule.name] = true
                         else if (item.type === 'Choices' && rule.name === 'default') {
                             console.log(33333333, item.select_list, item.select_list.indexOf(rule.value) < 0);
@@ -283,7 +285,13 @@
                         else if (rule.name === 'lens' || rule.name === 'max' || rule.name === 'min') {
                             obj[rule.name] = Number(rule.value)
                         }
-                        else obj[rule.name] = rule.value
+                        else {
+                            if (rule.value) {
+                                obj[rule.name] = rule.value.trim()
+                            } else {
+                                console.log('rule.valuerule.value', rule.value);
+                            }
+                        }
                         rulesObj[key] = Object.assign(obj, rulesObj[key])
                     })
                     fields = Object.assign(fields, fieldsObj)

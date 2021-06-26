@@ -43,5 +43,10 @@
 /deep/ .el-card__header {
     background: rgb(217, 236, 255);
 }
-
+/deep/ .el-table th>.cell{
+        display: inline-block;
+        white-space: nowrap;
+        word-break: keep-all;
+        text-overflow: unset;
+}
 </style>
