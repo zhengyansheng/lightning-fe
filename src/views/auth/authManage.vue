@@ -2,13 +2,23 @@
   <div class="authManagement-container">
     <el-row>
       <el-col :xs="24" :sm="24" :md="10" :lg="6" :xl="6" style="padding-left: 10px; padding-right: 10px;">
+        <div class="tablemanage-operate" style="background:#fff;padding-top:10px;display:flex;justify-content:flex-end;">
+            <el-button type="primary" plain size="small" @click="openLeftEditDia('')">新增</el-button>
+        </div>
         <el-tree
-          :data="data"
+          :data="leftRuleList"
           :props="defaultProps"
           node-key="id"
           :default-expanded-keys="['root']"
-          @node-click="handleNodeClick"
-        ></el-tree>
+          @node-click="handleNodeClick" >
+          <span class="custom-tree-node" slot-scope="{ node, data }">
+            <span>{{ node.label }}</span>
+            <span>
+              <el-button type="text" size="mini" @click="() => openLeftEditDia(data)">编辑</el-button>
+              <el-button type="text" size="mini" @click="() => remove(node, data)">删除</el-button>
+            </span>
+          </span>
+        </el-tree>
       </el-col>
       <el-col :xs="24" :sm="24" :md="14" :lg="18" :xl="18" style="padding:10px;background:#fff;">
         <div class="tablemanage-operate">
@@ -31,8 +41,8 @@
         </el-table>
       </el-col>
     </el-row>
-    <AuthLeftEdit :isShow="isShowLeftEdit" :editData="editDataLeftEdit" />
-    <AuthManagementEdit :isShow="isShowTableEdit" :editData="editDataTableEdit" />
+    <AuthLeftEdit :isShow.sync="isShowLeftEdit" :editData="editDataLeftEdit" />
+    <AuthManagementEdit :isShow.sync="isShowTableEdit" :editData="editDataTableEdit" />
   </div>
 </template>
 
@@ -45,7 +55,7 @@
     components: { AuthLeftEdit, AuthManagementEdit },
     data() {
       return {
-        data: [],
+        leftRuleList: [],
         defaultProps: {
           children: 'children',
           label: 'name',
@@ -63,20 +73,41 @@
     },
     methods: {
         getLeftRuleList() {
-            this.api.auth.fetchRuleInfoList().then(res => {
-                console.log(res);
-                this.tableData = res.data.data
+            this.api.auth.fetchRuleClassifyList().then(res => {
+                this.leftRuleList = res.data.results
+                if (this.leftRuleList.length) {
+                  this.ruleClassifyId = this.leftRuleList[0].id;
+                  this.fetchTableData()
+                }
             })
         },
+        openLeftEditDia(data) {
+          this.editDataLeftEdit = typeof data === 'string' ? {} : Object.assign({rule_classify: this.ruleClassifyId}, data)
+          this.isShowLeftEdit=true;
+        },
+        remove(node, data) {
+          this.$confirm('是否确认删除?', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+          }).then(() => {
+              this.api.auth.deleteRequestRuleClassify(data.id).then(res => {
+                  if (res.code === 0) {
+                      this.$message.success('删除成功')
+                      this.getLeftRuleList()
+                  } else {
+                      this.$message.error(res.message||'')
+                  }
+              })
+          }).catch(() => {});
+        },
         handleNodeClick(node) {
-            console.log('node', node)
             this.ruleClassifyId = node.id;
             this.fetchTableData()
         },
         fetchTableData() {
             this.api.auth.fetchRuleInfoList({rule_classify_id: this.ruleClassifyId}).then(res => {
-                console.log(res);
-                this.tableData = res.data.data
+                this.tableData = res.data.results
             })
         },
         editTableData(row) {
@@ -90,7 +121,7 @@
                 type: 'warning'
             }).then(() => {
                 this.api.auth.deleteRequestRuleInfo(data.id).then(res => {
-                    if (res.code === 2000) {
+                    if (res.code === 0) {
                         this.$message.success('删除成功')
                         this.fetchTableData()
                     } else {
@@ -118,6 +149,21 @@
         overflow: hidden;
         height: 0;
         transition: height .2s;
+    }
+    /deep/ .el-tree {
+        padding: 0 10px 20px;
+        box-sizing: border-box;
+    }
+    /deep/ .el-divider--horizontal {
+        margin: 10px 0;
+    }
+    .custom-tree-node {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 14px;
+      padding-right: 8px;
     }
 }
 </style>

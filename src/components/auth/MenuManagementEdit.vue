@@ -1,8 +1,10 @@
 <template>
 <el-dialog :title="title" :visible="isShow" width="800px" @close="closeDia">
-    <el-form ref="form" :model="form" :inline="true" label-width="120px">
+    <el-form ref="form" :model="form" :inline="true" label-width="120px" size="small">
         <el-form-item label="父级" prop="pid">
-            <el-input v-model="form.pid" autocomplete="off"></el-input>
+            <el-select v-model="form.pid" placeholder="请选择">
+                <el-option v-for="item in parentList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="路径" prop="path" required>
             <el-input v-model="form.path" autocomplete="off"></el-input>
@@ -26,7 +28,9 @@
             <el-input v-model="form.active_menu" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="角色" prop="role">
-            <el-input v-model="form.role" autocomplete="off"></el-input>
+            <el-select v-model="form.role" placeholder="请选择" multiple>
+                <el-option v-for="item in roleList" :key="item.id" :label="item.name" :value="item.id"></el-option>
+            </el-select>
         </el-form-item>
         <el-form-item label="排序" prop="order" required>
             <el-input v-model.number="form.order" type="number" autocomplete="off"></el-input>
@@ -73,7 +77,7 @@ export default {
         return {
             form: {
                 pid: null,
-                role: '',
+                role: [],
                 path: '',
                 name: '',
                 component: '',
@@ -89,27 +93,22 @@ export default {
                 breadcrumb: false,		
             },
             title: '',
+            parentList: [],
+            roleList: []
         }
     },
     watch: {
         isShow(newVal) {
             if (newVal) {
-                console.log(111, this.editData);
                 this.isEdit = Object.keys(this.editData).length
+                this.title = this.isEdit ? '编辑' : '新增';
+                if (this.isEdit) this.form = Object.assign({}, this.editData);
+                this.fetchTableData()
+                this.fetchRoleList()
             } else {
                 this.isEdit = false;
             }
         },
-        isEdit(newVal) {
-            if (newVal) {
-                this.title = '编辑'
-                this.form = Object.assign({}, this.editData)
-            } else {
-                this.title = '新增'
-                this.$refs['form'].resetFields()
-                this.form = this.$options.data().form
-            }
-        }
     },
     created() {},
     methods: {
@@ -118,14 +117,38 @@ export default {
             this.form = this.$options.data().form
             this.$emit('update:isShow', false)
         },
+        fetchTableData() {
+            this.api.auth.fetchParentMenuList().then(res => {
+                console.log(234, res.data);
+                this.parentList = res.data
+            })
+        },
+        fetchRoleList() {
+            this.api.auth.fetchRoleList().then(res => {
+                this.roleList = res.data.results
+            })
+        },
+        getLeftRuleList() {
+            this.api.auth.fetchRuleClassifyList().then(res => {
+                this.parentList = res.data.results
+            })
+        },
+        fetchApiAuthList() {
+            this.api.auth.fetchApiAuthList().then(res => {
+                if (res.code === 0) {
+                    this.roleList = res.data
+                } else {
+                    this.$message.error(res.message || '')
+                }
+            }).finally(res => {
+            })
+        },
         save() {
-            console.log(1)
             this.$refs['form'].validate(async (valid) => {
-                console.log(2, valid)
                 if (valid) {
                     if (this.isEdit) {
                         this.api.auth.editRequestMenu(this.editData.id, this.form).then(res => {
-                            if (res.code === 2000) {
+                            if (res.code === 0) {
                                 this.$message.success('编辑成功');
                                 this.closeDia();
                                 this.$parent.fetchTableData();
@@ -137,7 +160,7 @@ export default {
                         })
                     } else {
                         this.api.auth.addRequestMenu(this.form).then(res => {
-                            if (res.code === 2000) {
+                            if (res.code === 0) {
                                 this.$message.success('新增成功');
                                 this.closeDia();
                                 this.$parent.fetchTableData();
@@ -156,3 +179,8 @@ export default {
     },
 }
 </script>
+<style lang="scss" scoped>
+/deep/.el-form-item__content {
+    width: 190px;
+}
+</style>

@@ -43,10 +43,11 @@
         watch: {
             isShow(newVal) {
                 if (newVal) {
-                    console.log(111, this.editData);
                     this.isEdit = Object.keys(this.editData).length
+                    this.form = Object.assign({}, this.editData)
                 } else {
                     this.isEdit = false;
+                    this.form.name=''
                 }
             },
             isEdit(newVal) {
@@ -55,8 +56,6 @@
                     this.form = Object.assign({}, this.editData)
                 } else {
                     this.title = '新增'
-                    this.$refs['form'].resetFields()
-                    this.form = this.$options.data().form
                 }
             }
         },
@@ -66,7 +65,6 @@
             closeDia() {
                 this.$refs['form'].resetFields()
                 this.form = this.$options.data().form
-                this.editData = {};
                 this.$emit('update:isShow', false)
             },
             confirmSubmit() {
@@ -74,24 +72,24 @@
                 this.disabled = true;
                 if (this.isEdit) {
                     this.api.auth.editRequestRuleClassify(this.editData.id, this.form).then(res => {
-                        if (res.code === 2000) {
+                        if (res.code === 0) {
                             this.$message.success('编辑成功');
                             this.closeDia();
-                            this.$parent.fetchTableData();
+                            this.$parent.getLeftRuleList();
                         } else {
-                            this.$message.error(res.message)
+                            this.$message.error(res.message||'')
                         }
                     }).finally(res => {
                         this.disabled = false
                     })
                 } else {
                     this.api.auth.addRequestRuleClassify(this.form).then(res => {
-                        if (res.code === 2000) {
+                        if (res.code === 0) {
                             this.$message.success('新增成功');
                             this.closeDia();
-                            this.$parent.fetchTableData();
+                            this.$parent.getLeftRuleList();
                         } else {
-                            this.$message.error(res.message)
+                            this.$message.error(res.message||'')
                         }
                     }).finally(res => {
                         this.disabled = false

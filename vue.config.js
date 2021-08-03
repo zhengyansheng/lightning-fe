@@ -17,7 +17,7 @@ module.exports = {
                 url: 'http://ops.aiops724.com',
                 // url: 'http://121.4.224.236:8000',
                 goUrl: 'http://go-ops.aiops724.com',
-                cmdbUrl: 'http://121.4.224.236:9999',
+                cmdbUrl: 'http://121.4.224.236:9000',
             })
         }))
     },

@@ -19,7 +19,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        <AddRole :isShow="isShow" :editData="editData" />
+        <AddRole :isShow.sync="isShow" :editData="editData" />
     </div>
 </template>
 <script>
@@ -44,7 +44,7 @@
             fetchTableData() {
                 this.api.auth.fetchRoleList({search: this.search}).then(res => {
                     console.log(res);
-                    this.tableData = res.data.data
+                    this.tableData = res.data.results
                 })
             },
             editTableData(row) {
@@ -58,7 +58,7 @@
                     type: 'warning'
                 }).then(() => {
                     this.api.auth.deleteRequestRole(data.id).then(res => {
-                        if (res.code === 2000) {
+                        if (res.code === 0) {
                             this.$message.success('删除成功')
                             this.fetchTableData()
                         } else {

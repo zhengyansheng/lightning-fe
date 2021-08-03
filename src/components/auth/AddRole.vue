@@ -10,16 +10,16 @@
             </el-form-item>
             <el-form-item label="API权限" prop="rule">
                 <div>
-                    <el-checkbox v-model="selectAll" @change="handleSelectAll">全选</el-checkbox>
-                    <el-checkbox v-model="expand" @change="handleExpand">合并</el-checkbox>
+                    <el-checkbox v-model="selectAll" @change="handleSelectAll(selectAll)">全选</el-checkbox>
+                    <el-checkbox v-model="expand" @change="expandAll(expand)">合并</el-checkbox>
                 </div>
                 <el-tree
                     :data="roleList"
                     show-checkbox
-                    :default-expand-all="expand"
                     node-key="id"
                     ref="tree"
                     highlight-current
+                    :default-checked-keys="defaultCheckedKeys"
                     :props="defaultProps">
                 </el-tree>
             </el-form-item>
@@ -50,8 +50,7 @@
                 title: '',
                 isEdit: false,
                 form: {
-                    name: '',
-                    rule: []
+                    name: ''
                 },
                 roleList: [],
                 disabled: false,
@@ -60,16 +59,21 @@
                     label: 'name'
                 },
                 selectAll: false,
-                expand: false
+                expand: false,
+                defaultCheckedKeys: []
             }
         },
         watch: {
             isShow(newVal) {
+                console.log('isShow', newVal)
                 if (newVal) {
                     console.log(111, this.editData);
                     this.isEdit = Object.keys(this.editData).length
+                    this.defaultCheckedKeys = this.editData.rule || []
                     this.fetchApiAuthList();
                 } else {
+                    this.form = {}
+                    this.defaultCheckedKeys = []
                     this.isEdit = false;
                 }
             },
@@ -79,63 +83,76 @@
                     this.form = Object.assign({}, this.editData)
                 } else {
                     this.title = '新增'
-                    this.$refs['form'].resetFields()
-                    this.form = this.$options.data().form
                 }
             }
         },
         created() {
         },
         methods: {
-            closeDia() {
-                this.$refs['form'].resetFields()
-                this.form = this.$options.data().form
-                this.editData = {};
-                this.$emit('update:isShow', false)
+            expandAll(bool) {
+                var nodes =this.$refs.tree.store.nodesMap;
+                for (var i in nodes) {
+                    nodes[i].expanded = bool;
+                }
             },
-            handleSelectAll() {
-
+            handleSelectAll(isAll) {
+                if(isAll) this.$refs.tree.setCheckedNodes(this.roleList);
+                else this.$refs.tree.setCheckedKeys([]);
+            },
+            closeDia() {
+                this.$emit('update:isShow', false)
             },
             handleExpand(val) {
                 console.log(val)
             },
             fetchApiAuthList() {
                 this.api.auth.fetchApiAuthList().then(res => {
-                    if (res.code === 2000) {
+                    if (res.code === 0) {
                         this.roleList = res.data
                     } else {
-                        this.$message.error(res.message)
+                        this.$message.error(res.message || '')
                     }
                 }).finally(res => {
                 })
             },
+            getCheckedKeys() {
+                console.log(111, this.$refs.tree.getCheckedKeys(true));
+            },
             confirmSubmit() {
+                let rulesId = [];
+                let checkedNodes = this.$refs.tree.getCheckedNodes();
+                checkedNodes.forEach(item => {
+                    // if (item.children && item.children.length) {
+                    //     item.children.forEach(val => rulesId.push(val.id))
+                    // }
+                    if (!item.children) rulesId.push(item.id)
+                })
                 if (this.disabled) return false;
                 this.disabled = true;
                 let params = {
                     name: this.form.name,
-                    role: this.form.role,
+                    rule: rulesId,
                 }
                 if (this.isEdit) {
                     this.api.auth.editRequestRole(this.editData.id, params).then(res => {
-                        if (res.code === 2000) {
+                        if (res.code === 0) {
                             this.$message.success('编辑成功');
                             this.closeDia();
                             this.$parent.fetchTableData();
                         } else {
-                            this.$message.error(res.message)
+                            this.$message.error(res.message || '')
                         }
                     }).finally(res => {
                         this.disabled = false
                     })
                 } else {
                     this.api.auth.addRequestRole(params).then(res => {
-                        if (res.code === 2000) {
+                        if (res.code === 0) {
                             this.$message.success('新增成功');
                             this.closeDia();
                             this.$parent.fetchTableData();
                         } else {
-                            this.$message.error(res.message)
+                            this.$message.error(res.message||'')
                         }
                     }).finally(res => {
                         this.disabled = false
