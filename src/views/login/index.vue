@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form ref="form" label-width="0px" class="login-form" @keyup.enter="submit">
       <div class="title-container">
-        <h3 class="title">系统登录</h3>
+        <h3 class="title">Lightning 平台登录</h3>
       </div>
       <el-form-item>
         <el-input class="input-login" prefix-icon="el-icon-user-solid" v-model="username"></el-input>
@@ -12,7 +12,8 @@
       </el-form-item>
       <div style="margin-bottom:20px">
         <el-checkbox v-model="checked">Remember me</el-checkbox>
-        <el-checkbox v-model="checkLdap">ldap</el-checkbox>
+        <el-checkbox v-model="checkLDAP">LDAP</el-checkbox>
+        <el-checkbox v-model="checkSSO">SSO</el-checkbox>
       </div>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click="submit">Login</el-button>
 
