@@ -65,9 +65,10 @@
         </el-menu>
     </div>
     <div class="buttons">
-        <el-button type="primary" plain size="mini"><el-link type="primary" href="https://m.ke.qq.com/course/package/37523?saleToken=2508253&from=wxso" target="_blank">Airflow任务调度系统课程</el-link></el-button>
-        <el-button type="primary" plain size="mini"><el-link type="primary" href="https://github.com/zhengyansheng/lightning" target="_blank">仓库</el-link></el-button>
-        <el-button type="primary" plain size="mini" style="margin-left:10px;"><el-link type="primary" href="http://zhaopin.aiops724.com/" target="_blank">招聘</el-link></el-button>
+        <el-button type="primary" plain size="mini"><el-link type="primary" href="https://github.com/zhengyansheng/lightning" target="_blank">Github仓库</el-link></el-button>
+        <!--<el-button type="primary" plain size="mini" style="margin-left:10px;"><el-link type="primary" href="http://zhaopin.aiops724.com/" target="_blank">招聘</el-link></el-button>-->
+        <el-button type="primary" plain size="mini"><el-link type="primary" href="https://m.ke.qq.com/course/package/37523?saleToken=2508253&from=wxso" target="_blank">Airflow 课程-腾讯课堂</el-link></el-button>
+        <el-button type="primary" plain size="mini"><el-link type="primary" href="https://github.com/airflow-cn/airflow-video" target="_blank">Airflow 课程-51CTO</el-link></el-button>
     </div>
 </div>
 </template>

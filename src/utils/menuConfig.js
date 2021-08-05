@@ -68,27 +68,6 @@ const menuConfig = [{
 //         window.location.href = '/platform'
 //     }
 // }, 
-{
-    title: '定时任务',
-    index: '2',
-    routeName: 'cron',
-    go() {
-        window.location.href = '/cron'
-    }
-}, {
-    title: '任务调度',
-    index: '3',
-    routeName: 'scheduler',
-    go() {
-        window.location.href = '/scheduler'
-    }
-}, {
-    title: '消息网关',
-    index: '4',
-    routeName: 'network',
-    go() {
-        window.location.href = '/network'
-    }
 //}, {
 //    title: '审计',
 //    index: '5',
@@ -103,7 +82,8 @@ const menuConfig = [{
 //    go() {
 //        window.location.href = '/corp'
 //    }
-}, {
+//}, 
+{
     title: '资源数据中心',
     index: '5',
     children: [
@@ -157,41 +137,28 @@ const menuConfig = [{
             },
         }
     ]
+}, {
+    title: '定时任务',
+    index: '2',
+    routeName: 'cron',
+    go() {
+        window.location.href = '/cron'
+    }
+}, {
+    title: '任务调度',
+    index: '3',
+    routeName: 'scheduler',
+    go() {
+        window.location.href = '/scheduler'
+    }
+}, {
+    title: '消息网关',
+    index: '4',
+    routeName: 'network',
+    go() {
+        window.location.href = '/network'
+    }
 }
-// , {
-//     title: '资源管理',
-//     index: '3',
-//     children: [
-//         {
-//             title: '分类管理',
-//             desc: '',
-//             icon: '',
-//             index: '3-1',
-//             routeName: 'classification',
-//             go() {
-//                 window.location.href = '/cmdb/classification'
-//             }
-//         }, {
-//             title: '表管理',
-//             desc: '',
-//             icon: '',
-//             index: '3-2',
-//             routeName: 'table',
-//             go() {
-//                 window.location.href = '/cmdb/table'
-//             }
-//         }, {
-//             title: '数据管理',
-//             desc: '',
-//             icon: '',
-//             index: '3-3',
-//             routeName: 'data',
-//             go() {
-//                 window.location.href = '/cmdb/data'
-//             }
-//         }
-//     ]
-// }
 ]
 
 export default menuConfig

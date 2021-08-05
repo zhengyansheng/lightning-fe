@@ -27,7 +27,7 @@ class MachinePaid {
         // 交付云主机
         this.paidMultiCloudTemplate = data => {
             return request({
-                url: `${env.goUrl}/api/v1/multi-cloud/instance/create`,
+                url: `${env.goUrl}/api/v1/task-scheduler/dag/delivery_machine`,
                 method: 'post',
                 data: data
             })

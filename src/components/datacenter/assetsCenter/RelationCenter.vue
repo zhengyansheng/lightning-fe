@@ -152,6 +152,7 @@
             searchData() {
                 let params = {
                     table_classify_id: this.currentTableId,
+                    is_forbid_bind: false,
                     search: this.search,
                     page: this.currentPage
                 }
