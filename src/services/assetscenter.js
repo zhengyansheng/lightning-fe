@@ -5,7 +5,7 @@ class Assetscenter {
         // 主类型获取
         this.fetchAssetsMainList = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/classify/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/classify/`,
                 method: 'get',
                 params: data
             })
@@ -13,7 +13,7 @@ class Assetscenter {
         // 子类型获取
         this.fetchAssetsSecondList = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/`,
                 method: 'get',
                 params: data
             })
@@ -21,7 +21,7 @@ class Assetscenter {
         // 获取主页面table列表
         this.fetchAssetsTableList = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/`,
+                url: `${env.url}/api/v1/cmdb/table-data/`,
                 method: 'get',
                 params: data
             })
@@ -29,14 +29,14 @@ class Assetscenter {
         // 删除数据
         this.deleteTableData = id => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/${id}/`,
+                url: `${env.url}/api/v1/cmdb/table-data/${id}/`,
                 method: 'delete',
             })
         }
         // 新增数据
         this.addTableData = query => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/`,
+                url: `${env.url}/api/v1/cmdb/table-data/`,
                 method: 'post',
                 data: query
             })
@@ -44,7 +44,7 @@ class Assetscenter {
         // 编辑数据
         this.editTableData = (query, id) => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/${id}/`,
+                url: `${env.url}/api/v1/cmdb/table-data/${id}/`,
                 method: 'put',
                 data: query
             })
@@ -52,14 +52,14 @@ class Assetscenter {
         // 绑定中心列表查询
         this.fetchBDRelationList = id => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/${id}/`,
+                url: `${env.url}/api/v1/cmdb/table-data/${id}/`,
                 method: 'get',
             })
         }
         // 点击绑定后获取的列表
         this.fetchNeedBDRelationList = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/`,
+                url: `${env.url}/api/v1/cmdb/table-data/`,
                 method: 'get',
                 params: data
             })
@@ -67,7 +67,7 @@ class Assetscenter {
         // 绑定
         this.setBDRelation = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/relation/`,
+                url: `${env.url}/api/v1/cmdb/table-data/relation/`,
                 method: 'post',
                 data
             })
@@ -75,7 +75,7 @@ class Assetscenter {
         // 解绑
         this.cancelBDRelation = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/un-relation/`,
+                url: `${env.url}/api/v1/cmdb/table-data/un-relation/`,
                 method: 'delete',
                 data
             })
@@ -83,7 +83,7 @@ class Assetscenter {
         // 查询中心列表
         this.fetchSCList = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/search/`,
+                url: `${env.url}/api/v1/cmdb/table-data/search/`,
                 method: 'get',
                 params: data
             })
@@ -91,14 +91,14 @@ class Assetscenter {
         // 查询详情
         this.fetchSearchDetail = id => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-data/${id}/`,
+                url: `${env.url}/api/v1/cmdb/table-data/${id}/`,
                 method: 'get'
             })
         }
         // 变更记录
         this.fetchRecordList = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/record/`,
+                url: `${env.url}/api/v1/cmdb/record/`,
                 method: 'get',
                 params: data
             })

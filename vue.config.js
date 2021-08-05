@@ -14,11 +14,9 @@ module.exports = {
         config.output.filename = 'js/[name].[hash].js';
         config.plugins.push(new webpack.DefinePlugin({
             'VUE_ENV': JSON.stringify({
-                url: 'http://121.4.224.236:9000',
-                // url: 'http://ops.aiops724.com',
-                // url: 'http://121.4.224.236:8000',
+                // url: 'http://121.4.224.236:9000',
+                url: 'http://ops.aiops724.com',
                 goUrl: 'http://go-ops.aiops724.com',
-                cmdbUrl: 'http://121.4.224.236:9000',
             })
         }))
     },

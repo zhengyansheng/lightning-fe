@@ -5,7 +5,7 @@ class Datacenter {
         // 主页 获取列表数据
         this.fetchTableClassifyTree = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/tree/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/tree/`,
                 method: 'get',
                 params: data
             })
@@ -13,7 +13,7 @@ class Datacenter {
         // 主页 新增表按钮
         this.addNewTableClassify = (query, config) => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/`,
                 method: 'post',
                 data: query,
                 config
@@ -22,7 +22,7 @@ class Datacenter {
         // 主页 编辑分类按钮
         this.editTableClassify = (id, query, config) => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/${id}/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/${id}/`,
                 method: 'put',
                 data: query,
                 config
@@ -31,21 +31,21 @@ class Datacenter {
         // 主页 删除分类按钮
         this.deleteTableClassify = id => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/${id}/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/${id}/`,
                 method: 'delete'
             })
         }
         // 主页 编辑卡片
         this.getEditCardInfo = id => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/${id}/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/${id}/`,
                 method: 'get'
             })
         }
         // 获取分类列表
         this.getTypeList = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/`,
                 method: 'get',
                 params: data
             })
@@ -53,7 +53,7 @@ class Datacenter {
         // 获取主分类列表
         this.getMainTypeList = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/classify/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/classify/`,
                 method: 'get',
                 params: data
             })
@@ -61,7 +61,7 @@ class Datacenter {
         // 解除绑定 
         this.setUnrelation = data => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/un-relation/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/un-relation/`,
                 method: 'delete',
                 data: data
             })
@@ -69,7 +69,7 @@ class Datacenter {
         // 新增表字段
         this.editTableField = query => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-field/`,
+                url: `${env.url}/api/v1/cmdb/table-field/`,
                 method: 'post',
                 data: query
             })
@@ -77,7 +77,7 @@ class Datacenter {
         // 编辑表字段 
         this.editNewTableField = (query, id) => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-field/${id}/`,
+                url: `${env.url}/api/v1/cmdb/table-field/${id}/`,
                 method: 'put',
                 data: query
             })
@@ -85,7 +85,7 @@ class Datacenter {
         // 绑定
         this.editRelation = query => {
             return request({
-                url: `${env.cmdbUrl}/api/v1/cmdb/table-classify/relation/`,
+                url: `${env.url}/api/v1/cmdb/table-classify/relation/`,
                 method: 'post',
                 data: query
             })
