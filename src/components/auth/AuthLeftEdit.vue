@@ -63,8 +63,10 @@
         },
         methods: {
             closeDia() {
-                this.$refs['form'].resetFields()
-                this.form = this.$options.data().form
+                this.$nextTick(()=>{
+                    this.$refs['form'].clearValidate();
+                    this.form = this.$options.data().form
+                })
                 this.$emit('update:isShow', false)
             },
             confirmSubmit() {

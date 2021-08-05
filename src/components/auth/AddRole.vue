@@ -65,9 +65,7 @@
         },
         watch: {
             isShow(newVal) {
-                console.log('isShow', newVal)
                 if (newVal) {
-                    console.log(111, this.editData);
                     this.isEdit = Object.keys(this.editData).length
                     this.defaultCheckedKeys = this.editData.rule || []
                     this.fetchApiAuthList();
@@ -100,10 +98,10 @@
                 else this.$refs.tree.setCheckedKeys([]);
             },
             closeDia() {
+                this.$nextTick(()=>{
+                    this.$refs['form'].clearValidate();
+                })
                 this.$emit('update:isShow', false)
-            },
-            handleExpand(val) {
-                console.log(val)
             },
             fetchApiAuthList() {
                 this.api.auth.fetchApiAuthList().then(res => {
@@ -122,9 +120,6 @@
                 let rulesId = [];
                 let checkedNodes = this.$refs.tree.getCheckedNodes();
                 checkedNodes.forEach(item => {
-                    // if (item.children && item.children.length) {
-                    //     item.children.forEach(val => rulesId.push(val.id))
-                    // }
                     if (!item.children) rulesId.push(item.id)
                 })
                 if (this.disabled) return false;

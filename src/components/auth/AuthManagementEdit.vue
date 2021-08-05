@@ -57,23 +57,18 @@
         },
         watch: {
             isShow(newVal) {
-                console.log('isShow111', newVal, this.editData)
                 if (newVal) {
-                    console.log(111, this.editData);
                     this.isEdit = Object.keys(this.editData).length > 1
                 } else {
                     this.isEdit = false;
                 }
             },
             isEdit(newVal) {
-                console.log('idEdit111', newVal)
                 if (newVal) {
                     this.title = '编辑'
                     this.form = Object.assign({}, this.editData)
                 } else {
                     this.title = '新增'
-                    this.$refs['form'].resetFields()
-                    this.form = this.$options.data().form
                 }
             }
         },
@@ -81,8 +76,10 @@
         },
         methods: {
             closeDia() {
-                this.$refs['form'].resetFields()
-                this.form = this.$options.data().form
+                this.$nextTick(()=>{
+                    this.$refs['form'].clearValidate();
+                    this.form = this.$options.data().form
+                })
                 this.$emit('update:isShow', false)
             },
             confirmSubmit() {
