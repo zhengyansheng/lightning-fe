@@ -1,25 +1,30 @@
 # lightning-fe 
 
+
 ## Project setup
+
+> note:  
+> npm version: v14.14.0
+
 ```
-npm install
-npm install -g cnpm --registry=https://registry.npm.taobao.org
-cnpm install node-sass
+# npm install
+# npm install -g cnpm --registry=https://registry.npm.taobao.org
+# cnpm install node-sass
 ```
 
 ### Compiles and hot-reloads for development
 ```
-npm run serve
+# npm run serve
 ```
 
 ### Compiles and minifies for production
 ```
-npm run build
+# npm run build
 ```
 
 ### Lints and fixes files
 ```
-npm run lint
+# npm run lint
 ```
 
 ### Customize configuration
