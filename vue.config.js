@@ -9,7 +9,8 @@ module.exports = {
             errors: true
         }
     },
-    lintOnSave: process.env.NODE_ENV !== 'production',
+    // lintOnSave: process.env.NODE_ENV !== 'production',
+    lintOnSave: false,
     configureWebpack: config => {
         config.output.filename = 'js/[name].[hash].js';
         config.plugins.push(new webpack.DefinePlugin({
