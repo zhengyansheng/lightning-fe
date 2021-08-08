@@ -18,6 +18,7 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-pagination background :total="total" @current-change="currentPageChange" layout="total, prev, pager, next" style="text-align: right;padding-top: 40px;"></el-pagination>
         </div>
         <AddRole :isShow.sync="isShow" :editData="editData" />
     </div>
@@ -35,16 +36,24 @@
                 search: '',
                 isShow: false,
                 editData: {},
+                total: 0,
+                currentPage: 1
             }
         },
         created() {
             this.fetchTableData()
         },
         methods: {
+            // 页码切换
+            currentPageChange(val) {
+                this.currentPage = val
+                this.fetchTableData()
+            },
             fetchTableData() {
-                this.api.auth.fetchRoleList({search: this.search}).then(res => {
+                this.api.auth.fetchRoleList({search: this.search, page: this.currentPage}).then(res => {
                     console.log(res);
-                    this.tableData = res.data.results
+                    this.tableData = res.data.results;
+                    this.total = res.data.count;
                 })
             },
             editTableData(row) {

@@ -39,6 +39,7 @@
                 </template>
             </el-table-column>
         </el-table>
+        <el-pagination background :total="total" @current-change="currentPageChange" layout="total, prev, pager, next" style="text-align: right;padding-top: 40px;"></el-pagination>
       </el-col>
     </el-row>
     <AuthLeftEdit :isShow.sync="isShowLeftEdit" :editData="editDataLeftEdit" />
@@ -66,12 +67,19 @@
         isShowLeftEdit: false,
         editDataTableEdit: {},
         isShowTableEdit: false,
+        total: 0,
+        currentPage: 1
       }
     },
     created() {
         this.getLeftRuleList()
     },
     methods: {
+        // 页码切换
+        currentPageChange(val) {
+            this.currentPage = val
+            this.fetchTableData()
+        },
         getLeftRuleList() {
             this.api.auth.fetchRuleClassifyList().then(res => {
                 this.leftRuleList = res.data.results
@@ -106,8 +114,9 @@
             this.fetchTableData()
         },
         fetchTableData() {
-            this.api.auth.fetchRuleInfoList({rule_classify_id: this.ruleClassifyId}).then(res => {
-                this.tableData = res.data.results
+            this.api.auth.fetchRuleInfoList({rule_classify_id: this.ruleClassifyId, page: this.currentPage}).then(res => {
+                this.tableData = res.data.results;
+                this.total = res.data.count;
             })
         },
         editTableData(row) {
