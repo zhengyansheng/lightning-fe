@@ -67,7 +67,7 @@
     <div class="buttons">
         <el-button type="primary" plain size="mini"><el-link type="primary" href="https://github.com/zhengyansheng/lightning" target="_blank">Github仓库</el-link></el-button>
         <!--<el-button type="primary" plain size="mini" style="margin-left:10px;"><el-link type="primary" href="http://zhaopin.aiops724.com/" target="_blank">招聘</el-link></el-button>-->
-        <el-button type="primary" plain size="mini"><el-link type="primary" href="https://m.ke.qq.com/course/package/37523?saleToken=2508253&from=wxso" target="_blank">Airflow 课程-腾讯课堂</el-link></el-button>
+        <el-button type="primary" plain size="mini" style="margin-right:-37px;"><el-link type="primary" href="https://m.ke.qq.com/course/package/37523?saleToken=2508253&from=wxso" target="_blank">Airflow 课程-腾讯课堂</el-link></el-button>
         <el-button type="primary" plain size="mini"><el-link type="primary" href="https://github.com/airflow-cn/airflow-video" target="_blank">Airflow 课程-51CTO</el-link></el-button>
     </div>
 </div>
@@ -214,7 +214,7 @@ h3 {
     z-index: 9;
 
     .logo {
-        width: 144px;
+        width: auto;
         height: 48px;
         line-height: 48px;
         float: left;
@@ -247,6 +247,7 @@ h3 {
                 font-size: 16px;
                 font-weight: 400;
                 color: #647787;
+                padding: 0 10px;
             }
             /deep/ .el-submenu__title{
                 height: 48px;
@@ -313,6 +314,10 @@ h3 {
         float: right;
         line-height: 48px;
         height: 48px;
+        /deep/ .el-button {
+            transform: scale(0.8);
+            margin-right: -30px;
+        }
     }
     .el-link.el-link--primary:hover {
         color: #fff;
