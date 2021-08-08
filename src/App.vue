@@ -49,7 +49,7 @@ export default {
 html, body {
         height: 100%;
         background: #F8F8F8;
-        overflow: hidden;
+        
         -webkit-transform: translate3d(0,0,0);
         transform: translate3d(0,0,0);
     }
