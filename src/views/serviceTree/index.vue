@@ -31,11 +31,13 @@
                     <el-tab-pane name="6" label="发布系统"><img :src="lockPic" /></el-tab-pane>
                     <el-tab-pane name="8" label="监控管理"><img :src="lockPic" /></el-tab-pane>
                     <el-tab-pane name="9" label="流量调度"><img :src="lockPic" /></el-tab-pane>
-                    <el-tab-pane name="7" label="域名管理"><img :src="lockPic" /></el-tab-pane>
                 </el-tabs>
             </div>
         </div>
     </div>
+<div class="footer"> 
+  <center> <a href="https://beian.miit.gov.cn/#/Integrated/index" target="_blank"> 京ICP备2021003533号-1 </a> </center>
+</div>
 </div>
 </template>
 
@@ -119,5 +121,9 @@ export default {
             box-sizing: border-box;
         }
     }
+    .footer{
+        margin-top:1800px;
+        background-color: #ffc0cb;
+   }/* margin-top（负值的）高度等于footer的height值 */
 }
 </style>

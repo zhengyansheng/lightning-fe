@@ -34,33 +34,6 @@ const menuConfig = [{
         }
     ]
 }, {
-    title: '权限管理',
-    index: '3',
-    children: [
-        {
-            title: '角色管理',
-            index: '3-1',
-            routeName: 'roles',
-            go() {
-                window.location.href = '/authroles'
-            },
-        }, {
-            title: '权限管理',
-            index: '3-2',
-            routeName: 'authority',
-            go() {
-                window.location.href = '/authority'
-            },
-        }, {
-            title: '菜单管理',
-            index: '3-3',
-            routeName: 'menus',
-            go() {
-                window.location.href = '/authmenus'
-            },
-        }
-    ]
-}, {
     title: '定时任务',
     index: '4',
     routeName: 'cron',
